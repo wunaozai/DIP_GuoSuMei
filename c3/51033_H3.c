@@ -274,7 +274,7 @@ int WriteHist(int * hist,char * fname,struct IMG * img)
 	fprintf(fp,"Hist,Red,Green,Blue\n");
 	for(i=0;i<img->maxv+1;i++)
 	{
-	    fprintf(fp,"%d,%d,%d,%d\n",i,hist[i],hist[(img->maxv+1)+i],hist[(img->maxv+1)+i]);
+	    fprintf(fp,"%d,%d,%d,%d\n",i,hist[i],hist[(img->maxv+1)+i],hist[(img->maxv+1)*2+i]);
 	}
 	fclose(fp);
 	
