@@ -502,3 +502,57 @@ int unBitPlane(struct IMG * img,char * str,int bit)
     }
     return 0;
 }
+
+int BinaryZationPPM(struct IMG * img,int val)
+{
+    int i,j,k;
+    int step,cnt;
+    int * valmap=malloc((img->maxv+1)*sizeof(int));
+    if(val<2||val>=img->maxv)
+    {
+	printf("BinaryZationPPM() --> The val is error!\n");
+	exit(-1);
+    }
+    step=(img->maxv)/(val-1);
+    cnt=0;
+    for(i=0;i<img->maxv+1;)
+    {
+	for(j=0;j<(img->maxv+1)/val;j++,i++)
+	{
+	    valmap[i]=cnt;
+	}
+	cnt=cnt+step;
+	cnt=cnt>255?255:cnt;
+    }
+#ifdef DEBUG
+    for(i=0;i<img->maxv+1;i++)
+    {
+	printf("valmap[%d]=%d\n",i,valmap[i]);
+    }
+#endif
+    if(img->channel==5)
+    {
+	for(i=0;i<img->sx;i++)
+	{
+	    for(j=0;j<img->sy;j++)
+	    {
+		img->img[i*img->sy+j]=valmap[img->img[i*img->sy+j]];
+	    }
+	}
+    }
+    else if(img->channel==6)
+    {
+	for(i=0;i<img->sx;i++)
+	{
+	    for(j=0;j<img->sy;j++)
+	    {
+		for(k=0;k<3;k++)
+		{
+		    img->img[(i*img->sy+j)*3+k]=valmap[img->img[(i*img->sy+j)*3+k]];
+		}
+	    }
+	}
+    }
+    free(valmap);
+    return 0;
+}

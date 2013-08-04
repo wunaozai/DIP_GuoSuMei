@@ -93,3 +93,9 @@ int BitPlane(struct IMG * img,char * str,int bit);
  * */
 int unBitPlane(struct IMG * img,char * str,int bit);
 
+/*
+ * BinaryZationPPM 图片的多值化
+ * 参数 PPM图片，val值化
+ * */
+int BinaryZationPPM(struct IMG * img,int val);
+

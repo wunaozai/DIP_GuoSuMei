@@ -9,7 +9,7 @@
  ****************************************/
 
 #include "51033_H4.h"
-
+//  51033_H4_Fun.c
 //#define DEBUG 1
 
 int H2();
@@ -20,12 +20,32 @@ int main()
 {
     //H2();
     //H3();
-    H3_1();
+    //H3_1();
+    H3_2();
     return 0;
 }
 
 //函数定义
 
+/*H3_2*/
+int H3_2()
+{
+    //实现二值化
+    char fname[file_name_len];
+    struct IMG image;
+    struct IMG * pimg=&image;
+    //lena
+    strcpy(fname,"lena.ppm");
+    ReadPPM(fname,pimg);
+    BinaryZationPPM(pimg,2);
+    WritePPM("lena_binaryzation.ppm",pimg);
+    //Parrots
+    strcpy(fname,"Parrots.ppm");
+    ReadPPM(fname,pimg);
+    BinaryZationPPM(pimg,4);
+    WritePPM("Parrots_binaryzation.ppm",pimg);
+    return 0;
+}
 /*提高H3_1*/
 int H3_1()
 {
@@ -33,7 +53,7 @@ int H3_1()
     char fname[file_name_len];
     struct IMG image;
     struct IMG * pimg=&image;
-    char str[1024];
+    char str[str_info_len];
     int bit=7;//第0比特用来当作水印信息,因为低频率人眼不敏感
     //使用bit=7时，打开图片可以看到图片最上面的图片颜色信息有明显的痕迹
     //lena
