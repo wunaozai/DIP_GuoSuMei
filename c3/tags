@@ -1,0 +1,29 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ComponentPPM	51033_H3.c	/^int ComponentPPM(char * fname,struct IMG * img)$/;"	f	signature:(char * fname,struct IMG * img)
+DEBUG	51033_H3.c	14;"	d	file:
+H3	51033_H3.c	15;"	d	file:
+HistPPM	51033_H3.c	/^int HistPPM(int * hist,struct IMG * img)$/;"	f	signature:(int * hist,struct IMG * img)
+IMG	51033_H3.c	/^struct IMG$/;"	s	file:
+IMG::ch	51033_H3.c	/^    char ch;$/;"	m	struct:IMG	file:	access:public
+IMG::channel	51033_H3.c	/^    int channel;$/;"	m	struct:IMG	file:	access:public
+IMG::img	51033_H3.c	/^    unsigned char * img;$/;"	m	struct:IMG	file:	access:public
+IMG::maxv	51033_H3.c	/^    int maxv;$/;"	m	struct:IMG	file:	access:public
+IMG::sx	51033_H3.c	/^    int sx,sy;$/;"	m	struct:IMG	file:	access:public
+IMG::sy	51033_H3.c	/^    int sx,sy;$/;"	m	struct:IMG	file:	access:public
+NegativePPM	51033_H3.c	/^int NegativePPM(struct IMG * img)$/;"	f	signature:(struct IMG * img)
+ReadPPM	51033_H3.c	/^int ReadPPM(char * fname,struct IMG * img)$/;"	f	signature:(char * fname,struct IMG * img)
+WriteHist	51033_H3.c	/^int WriteHist(int * hist,char * fname,struct IMG * img)$/;"	f	signature:(int * hist,char * fname,struct IMG * img)
+WritePPM	51033_H3.c	/^int WritePPM(char * fname,struct IMG * img)$/;"	f	signature:(char * fname,struct IMG * img)
+ch	51033_H3.c	/^    char ch;$/;"	m	struct:IMG	file:	access:public
+channel	51033_H3.c	/^    int channel;$/;"	m	struct:IMG	file:	access:public
+file_name_len	51033_H3.c	18;"	d	file:
+img	51033_H3.c	/^    unsigned char * img;$/;"	m	struct:IMG	file:	access:public
+main	51033_H3.c	/^int main()$/;"	f
+maxv	51033_H3.c	/^    int maxv;$/;"	m	struct:IMG	file:	access:public
+sx	51033_H3.c	/^    int sx,sy;$/;"	m	struct:IMG	file:	access:public
+sy	51033_H3.c	/^    int sx,sy;$/;"	m	struct:IMG	file:	access:public
