@@ -1,42 +1,16 @@
 /****************************************
  * Copyright (C) 2013-2013 All rights reserved.
  * @Version: 1.0
- * @Created: 2013-09-14 12:03
+ * @Created: 2013-09-18 22:18
  * @Author: 林明晓 -- 563804489@qq.com
  * @Description: 
- *
+ *	把原来的程序分解成多个文件，便于管理
  * @History: 
- *	    2013-09-18 00:42:40 +H3
+ *	    2013年9月19日 01:33:31 + BitPlane + unBitPlane == 位运算好难啊。
  ****************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
+#include "51033_H4.h"
 
-#define DEBUG 1
-#define H3 1 /*表示是实验3*/
-#define H2
-
-//The const number
-#define file_name_len 32
-
-/*
- * 图片的格式
- * */
-struct IMG
-{
-    char ch;
-    int channel;
-    int sx,sy;
-    int maxv;
-    unsigned char * img;
-};
-
-
-/*
- * 读取PPM图片，并返回到IMG中
- * */
 int ReadPPM(char * fname,struct IMG * img)
 {
     FILE * fp=NULL;
@@ -80,9 +54,6 @@ int ReadPPM(char * fname,struct IMG * img)
     return 0;
 }
 
-/*
- * 将IMG中的PPM图片文件写入到文件系统中
- * */
 int WritePPM(char * fname,struct IMG * img)
 {
     FILE * fp=NULL;
@@ -105,9 +76,6 @@ int WritePPM(char * fname,struct IMG * img)
     return 0;
 }
 
-/*
- * 进行负片的计算 直接将原图片转换成负片
- * */
 int NegativePPM(struct IMG * img)
 {
     int i,j,k;
@@ -139,9 +107,6 @@ int NegativePPM(struct IMG * img)
     return 0;
 }
 
-/*
- * 计算PPM图片的灰度直方图，并保存到hist数组中
- * */
 int HistPPM(int * hist,struct IMG * img)
 {
     int i,j,k;
@@ -189,10 +154,6 @@ int HistPPM(int * hist,struct IMG * img)
     return 0;
 }
 
-
-/*
- * 将PPM图片的灰度直方图写到文件中
- * */
 int WriteHist(int * hist,char * fname,struct IMG * img)
 {
     int i;
@@ -284,11 +245,6 @@ int WriteHist(int * hist,char * fname,struct IMG * img)
     return 0;
 }
 
-/*
- * 计算一个PPM6彩色图片的分量图
- * return -1 表示图片为黑白图片不能计算分量图
- * 保存到fname中
- * */
 int ComponentPPM(char * fname,struct IMG * img)
 {
     struct IMG cimg[3];
@@ -349,9 +305,6 @@ int ComponentPPM(char * fname,struct IMG * img)
     return 0;
 }
 
-/*
- * 映射函数数组生成
- * */
 int Square_MapPPM(int * arrmap,int maxv)
 {
     int i;
@@ -366,9 +319,6 @@ int Square_MapPPM(int * arrmap,int maxv)
     return 0;
 }
 
-/*
- * 映射函数数组生成
- * */
 int Sqrt_MapPPM(int * arrmap,int maxv)
 {
     int i;
@@ -383,9 +333,6 @@ int Sqrt_MapPPM(int * arrmap,int maxv)
     return 0;
 }
 
-/*
- * 映射函数，输入一幅PPM图片和一个转换数组进行映射
- * */
 int MapPPM(int * arrmap,struct IMG * img)
 {
     int i,j,k;
@@ -415,97 +362,143 @@ int MapPPM(int * arrmap,struct IMG * img)
     return 0;
 }
 
-int main()
+int BitPlane(struct IMG * img,char * str,int bit)
 {
-    char fname[file_name_len];
-    struct IMG image;
-    struct IMG * pimg=&image;
-#ifdef H2
-    //lena
-    strcpy(fname,"lena.ppm");
-    ReadPPM(fname,pimg);
-    NegativePPM(pimg);
-    strcpy(fname,"lena_m.ppm");
-    WritePPM(fname,pimg);
-    //parrots 
-    strcpy(fname,"Parrots.ppm");
-    ReadPPM(fname,pimg);
-    NegativePPM(pimg);
-    strcpy(fname,"Parrots_m.ppm");
-    WritePPM(fname,pimg);
-#endif
-
-#ifdef H3
-    // hint
-    // lena
-    int * hist=NULL;
-    int * array=NULL;
-    strcpy(fname,"lena.ppm");
-    ReadPPM(fname,pimg);
-    hist=(int *)calloc(sizeof(int),(pimg->maxv+1)*((pimg->channel-5)*2+1));//hist[] color:3*pimg->maxv
-    if(hist==NULL)
+    int i,j,k;
+    int cnt;
+    int temp;
+    printf("准备加密的信息:%s\n",str);
+    if(img->channel==5)
     {
-	printf("分配内存失败!\n");
-	exit(-1);
-    }
-    printf("calloc=%d\n",sizeof(int)*(pimg->maxv+1)*((pimg->channel-5)*2+1));
-    HistPPM(hist,pimg);
-    strcpy(fname,"lena");
-    WriteHist(hist,fname,pimg);
-    
-    //Parrots
-    strcpy(fname,"Parrots.ppm");
-    ReadPPM(fname,pimg);
-    hist=(int *)calloc(sizeof(int),(pimg->maxv+1)*((pimg->channel-5)*2+1));//Hist[] color:3*pimg->maxv 
-    if(hist==NULL)
-    {
-	printf("分配内存失败!\n");
-	exit(-1);
-    }
-    HistPPM(hist,pimg);
-    strcpy(fname,"Parrots");
-    WriteHist(hist,fname,pimg);
-
-    //计算分量图
-    strcpy(fname,"Parrots.ppm");
-    ReadPPM(fname,pimg);
-    strcpy(fname,"Parrots");
-    ComponentPPM(fname,pimg);
-    free(hist);
-
-    //计算映射函数
-    //lena
-    strcpy(fname,"lena.ppm");
-    ReadPPM(fname,pimg);
-    array=(int *)calloc(sizeof(int),(pimg->maxv+1)*((pimg->channel-5)*2+1));//Hist[] color:3*pimg->maxv 
-    Square_MapPPM(array,pimg->maxv);
-    MapPPM(array,pimg);
-    strcpy(fname,"lena_square.ppm");
-    WritePPM(fname,pimg);
-    Sqrt_MapPPM(array,pimg->maxv);
-    MapPPM(array,pimg);
-    strcpy(fname,"lena_sqrt.ppm");
-    WritePPM(fname,pimg);
-    //Parrots
-    strcpy(fname,"Parrots.ppm");
-    ReadPPM(fname,pimg);
-    array=(int *)calloc(sizeof(int),(pimg->maxv+1)*((pimg->channel-5)*2+1));//Hist[] color:3*pimg->maxv 
-    Square_MapPPM(array,pimg->maxv);
-    MapPPM(array,pimg);
-    strcpy(fname,"Parrots_square.ppm");
-    WritePPM(fname,pimg);
-    Sqrt_MapPPM(array,pimg->maxv);
-    MapPPM(array,pimg);
-    strcpy(fname,"Parrots_sqrt.ppm");
-    WritePPM(fname,pimg);
-
+	cnt=0;
+	for(i=0;i<img->sx;i++)
+	{
+	    for(j=0;j<img->sy;j++)
+	    {
+		/* //1的情况
+		//img->img[i*img->sy+j]=(img->img[i*img->sy+j] | 1 )-1;//末尾置零
+		temp=img->img[i*img->sy+j];
+		temp=(temp|1)-1;
+		//str[cnt/8]>>(cnt%8) & 1; //取最后一位
+		temp=temp|(str[cnt/8]>>(cnt%8)&1);
+		img->img[i*img->sy+j]=temp;
+#ifdef DEBUG
+		printf("---%d---%d\n",temp%2,cnt);
 #endif
-
+		*/
+		temp=img->img[i*img->sy+j];
+		temp=((temp|(1<<bit)))-(1<<bit);
+		//str[cnt/8]>>(cnt%8) & 1; //取最后一位
+		temp=temp| ( (str[cnt/8]>>(cnt%8)&1) <<bit);
+		img->img[i*img->sy+j]=temp;
+#ifdef DEBUG
+		printf("---%d---%d\n",temp&(1<<bit),cnt);
+#endif
+		if(str[(cnt/8)-1]==0)
+		{
+		    //printf("遇到\\0结束符号\n");
+		    return 0;
+		}
+		//第[cnt/8]个字符 
+		//第 cnt%8 位
+		cnt++;
+	    }
+	}
+    }
+    else if(img->channel==6)
+    {
+	cnt=0;
+	for(i=0;i<img->sx;i++)
+	{
+	    for(j=0;j<img->sy;j++)
+	    {
+		for(k=0;k<3;k++)
+		{
+		    temp=img->img[(i*img->sy+j)*3+k];
+		    temp=((temp|(1<<bit)))-(1<<bit);
+		    temp=temp| ( (str[cnt/8]>>(cnt%8)&1) <<bit);
+		    img->img[(i*img->sy+j)*3+k]=temp;
+#ifdef DEBUG
+		    printf("---%d---%d\n",temp&(1<<bit),cnt);
+#endif
+		    if(str[(cnt/8)-1]==0)
+		    {
+			//printf("遇到\\0结束符号\n");
+			return 0;
+		    }
+		    cnt++;
+		}
+	    }
+	}
+    }
     return 0;
 }
 
+int unBitPlane(struct IMG * img,char * str,int bit)
+{
+    int i,j,k;
+    int temp;
+    int cnt;
+    memset(str,0,sizeof(str_info_len));//注意要初始化
+    if(img->channel==5)
+    {
+	cnt=0;
+	for(i=0;i<img->sx;i++)
+	{
+	    for(j=0;j<img->sy;j++)
+	    {
+		/* //1位的时候
+		//取最后一位
+		temp=img->img[i*img->sy+j] & 1;//取最后一位
+#ifdef DEBUG
+		printf("---%d---\n",temp%2);
+#endif
+		str[cnt/8]= str[cnt/8] | temp<<(cnt%8);
+		*/
+		//取最后bit位
+		temp=img->img[i*img->sy+j] & (1<<bit);//取最后bit位 
+#ifdef DEBUG
+		printf("---%d---\n",temp);
+#endif
+		str[cnt/8]= str[cnt/8] | (temp>>bit)<<(cnt%8);
 
-/*注意事项*/
-/*
- * 1.图片的maxv是255 有些要注意+1
- * */
+		if(cnt%8==7)//在最后一个bit进行判断
+		{
+		    if(str[cnt/8]==0)
+		    {
+			//printf("遇到\\0结束符号\n");
+			return 0;
+		    }
+		}
+		cnt++;
+	    }
+	}
+    }
+    else if(img->channel==6)
+    {
+	cnt=0;
+	for(i=0;i<img->sx;i++)
+	{
+	    for(j=0;j<img->sy;j++)
+	    {
+		for(k=0;k<3;k++)
+		{
+		    temp=img->img[(i*img->sy+j)*3+k] & (1<<bit);//取最后bit位 
+#ifdef DEBUG
+		    printf("---%d---\n",temp);
+#endif
+		    str[cnt/8]= str[cnt/8] | (temp>>bit)<<(cnt%8);
+		    if(cnt%8==7)//在最后一个bit进行判断
+		    {
+			if(str[cnt/8]==0)
+			{
+			    return 0;
+			}
+		    }
+		    cnt++;
+		}
+	    }
+	}
+    }
+    return 0;
+}

@@ -1,0 +1,45 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ComponentPPM	51033_H4.h	/^int ComponentPPM(char * fname,struct IMG * img);$/;"	p	signature:(char * fname,struct IMG * img)
+ComponentPPM	51033_H4_Fun.c	/^int ComponentPPM(char * fname,struct IMG * img)$/;"	f	signature:(char * fname,struct IMG * img)
+H2	51033_H4_Main.c	/^int H2()$/;"	f
+H2	51033_H4_Main.c	/^int H2();$/;"	p	file:
+H3	51033_H4_Main.c	/^int H3()$/;"	f
+H3	51033_H4_Main.c	/^int H3();$/;"	p	file:
+H3_1	51033_H4_Main.c	/^int H3_1()$/;"	f
+H3_1	51033_H4_Main.c	/^int H3_1();$/;"	p	file:
+HistPPM	51033_H4.h	/^int HistPPM(int * hist,struct IMG * img);$/;"	p	signature:(int * hist,struct IMG * img)
+HistPPM	51033_H4_Fun.c	/^int HistPPM(int * hist,struct IMG * img)$/;"	f	signature:(int * hist,struct IMG * img)
+IMG	51033_H4.h	/^struct IMG$/;"	s
+IMG::ch	51033_H4.h	/^    char ch;$/;"	m	struct:IMG	access:public
+IMG::channel	51033_H4.h	/^    int channel;$/;"	m	struct:IMG	access:public
+IMG::img	51033_H4.h	/^    unsigned char * img;$/;"	m	struct:IMG	access:public
+IMG::maxv	51033_H4.h	/^    int maxv;$/;"	m	struct:IMG	access:public
+IMG::sx	51033_H4.h	/^    int sx,sy;$/;"	m	struct:IMG	access:public
+IMG::sy	51033_H4.h	/^    int sx,sy;$/;"	m	struct:IMG	access:public
+MapPPM	51033_H4.h	/^int MapPPM(int * arrmap,struct IMG * img);$/;"	p	signature:(int * arrmap,struct IMG * img)
+MapPPM	51033_H4_Fun.c	/^int MapPPM(int * arrmap,struct IMG * img)$/;"	f	signature:(int * arrmap,struct IMG * img)
+NegativePPM	51033_H4.h	/^int NegativePPM(struct IMG * img);$/;"	p	signature:(struct IMG * img)
+NegativePPM	51033_H4_Fun.c	/^int NegativePPM(struct IMG * img)$/;"	f	signature:(struct IMG * img)
+ReadPPM	51033_H4.h	/^int ReadPPM(char * fname,struct IMG * img);$/;"	p	signature:(char * fname,struct IMG * img)
+ReadPPM	51033_H4_Fun.c	/^int ReadPPM(char * fname,struct IMG * img)$/;"	f	signature:(char * fname,struct IMG * img)
+Sqrt_MapPPM	51033_H4.h	/^int Sqrt_MapPPM(int * arrmap,int maxv);$/;"	p	signature:(int * arrmap,int maxv)
+Sqrt_MapPPM	51033_H4_Fun.c	/^int Sqrt_MapPPM(int * arrmap,int maxv)$/;"	f	signature:(int * arrmap,int maxv)
+Square_MapPPM	51033_H4.h	/^int Square_MapPPM(int * arrmap,int maxv);$/;"	p	signature:(int * arrmap,int maxv)
+Square_MapPPM	51033_H4_Fun.c	/^int Square_MapPPM(int * arrmap,int maxv)$/;"	f	signature:(int * arrmap,int maxv)
+WriteHist	51033_H4.h	/^int WriteHist(int * hist,char * fname,struct IMG * img);$/;"	p	signature:(int * hist,char * fname,struct IMG * img)
+WriteHist	51033_H4_Fun.c	/^int WriteHist(int * hist,char * fname,struct IMG * img)$/;"	f	signature:(int * hist,char * fname,struct IMG * img)
+WritePPM	51033_H4.h	/^int WritePPM(char * fname,struct IMG * img);$/;"	p	signature:(char * fname,struct IMG * img)
+WritePPM	51033_H4_Fun.c	/^int WritePPM(char * fname,struct IMG * img)$/;"	f	signature:(char * fname,struct IMG * img)
+ch	51033_H4.h	/^    char ch;$/;"	m	struct:IMG	access:public
+channel	51033_H4.h	/^    int channel;$/;"	m	struct:IMG	access:public
+file_name_len	51033_H4.h	20;"	d
+img	51033_H4.h	/^    unsigned char * img;$/;"	m	struct:IMG	access:public
+main	51033_H4_Main.c	/^int main()$/;"	f
+maxv	51033_H4.h	/^    int maxv;$/;"	m	struct:IMG	access:public
+sx	51033_H4.h	/^    int sx,sy;$/;"	m	struct:IMG	access:public
+sy	51033_H4.h	/^    int sx,sy;$/;"	m	struct:IMG	access:public
