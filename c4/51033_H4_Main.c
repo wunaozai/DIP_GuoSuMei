@@ -20,9 +20,9 @@ int H3_2();
 int main()
 {
     //H2();
-    //H3();
+    H3();
     //H3_1();
-    //H3_2();
+    H3_2();
     //H3_3();
     return 0;
 }
@@ -191,7 +191,7 @@ int H3()
     MapPPM(array,pimg);
     strcpy(fname,"Parrots_sqrt.ppm");
     WritePPM(fname,pimg);
-
+    free(array);
     return 0;
 }
 
@@ -199,4 +199,5 @@ int H3()
 /*
  * 1.图片的maxv是255 有些要注意+1
  * 2.位操作要加强啊，bitPlane操作起来有点力不从心啊，用了将近4个小时
+ * 3.H3()和H3_1()不能同时运行，一运行H3_1()的加密信息就不准。有待时间修改
  * */
