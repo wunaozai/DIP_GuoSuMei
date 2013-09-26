@@ -99,3 +99,9 @@ int unBitPlane(struct IMG * img,char * str,int bit);
  * */
 int BinaryZationPPM(struct IMG * img,int val);
 
+/*
+ * CopyPPM 对图片进行复制
+ * 参数struct IMG * from,struct IMG * to
+ * */
+int CopyPPM(struct IMG * from, struct IMG * to);
+

@@ -7,6 +7,7 @@
  *	把原来的程序分解成多个文件，便于管理
  * @History: 
  *	    2013年9月19日 01:33:31 + BitPlane + unBitPlane == 位运算好难啊。
+ *	    2013年9月26日 23:14:37 + CopyPPM
  ****************************************/
 
 #include "51033_H4.h"
@@ -554,5 +555,41 @@ int BinaryZationPPM(struct IMG * img,int val)
 	}
     }
     free(valmap);
+    return 0;
+}
+
+int CopyPPM(struct IMG * from,struct IMG * to)
+{
+    int i,j,k;
+    to->ch=from->ch;
+    to->channel=from->channel;
+    to->maxv=from->maxv;
+    to->sx=from->sx;
+    to->sy=from->sy;
+    if(from->channel==5)
+    {
+	to->img=(unsigned char *)malloc(to->sx*to->sy);
+	for(i=0;i<from->sx;i++)
+	{
+	    for(j=0;j<from->sy;j++)
+	    {
+		to->img[i*from->sy+j]=from->img[i*from->sy+j];
+	    }
+	}
+    }
+    else if(from->channel==6)
+    {
+	to->img=(unsigned char *)malloc(to->sx*to->sy*3);
+	for(i=0;i<from->sx;i++)
+	{
+	    for(j=0;j<from->sy;j++)
+	    {
+		for(k=0;k<3;k++)
+		{
+		    to->img[(i*from->sy+j)*3+k]=from->img[(i*from->sy+j)*3+k];
+		}
+	    }
+	}
+    }
     return 0;
 }

@@ -15,17 +15,40 @@
 int H2();
 int H3();
 int H3_1();
+int H3_2();
 
 int main()
 {
     //H2();
     //H3();
     //H3_1();
-    H3_2();
+    //H3_2();
+    //H3_3();
     return 0;
 }
 
 //函数定义
+
+int H3_3()
+{
+    /*实现图片的复制，因为以前对图片的操作都是在原图片进行的操作。所以可以用这个函数进行图片的复制*/
+    char fname[file_name_len];
+    struct IMG image;
+    struct IMG image2;
+    struct IMG * pimg=&image;
+    struct IMG * pimg2=&image2;
+    //lena
+    strcpy(fname,"lena.ppm");
+    ReadPPM(fname,pimg);
+    CopyPPM(pimg,pimg2);
+    WritePPM("lena_copy.ppm",pimg2);
+    //Parrots
+    strcpy(fname,"Parrots.ppm");
+    ReadPPM(fname,pimg);
+    CopyPPM(pimg,pimg2);
+    WritePPM("Parrots_copy.ppm",pimg2);
+    return 0;
+}
 
 /*H3_2*/
 int H3_2()
@@ -54,7 +77,7 @@ int H3_1()
     struct IMG image;
     struct IMG * pimg=&image;
     char str[str_info_len];
-    int bit=7;//第0比特用来当作水印信息,因为低频率人眼不敏感
+    int bit=7;//第1比特用来当作水印信息,因为低频率人眼不敏感
     //使用bit=7时，打开图片可以看到图片最上面的图片颜色信息有明显的痕迹
     //lena
     strcpy(str,"Lena!This is the DIP course.");
