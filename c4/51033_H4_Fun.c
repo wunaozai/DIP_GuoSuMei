@@ -8,6 +8,7 @@
  * @History: 
  *	    2013年9月19日 01:33:31 + BitPlane + unBitPlane == 位运算好难啊。
  *	    2013年9月26日 23:14:37 + CopyPPM
+ *	    2013年10月14日 22:02:03 + 修改了灰度映射函数
  ****************************************/
 
 #include "51033_H4.h"
@@ -312,7 +313,8 @@ int Square_MapPPM(int * arrmap,int maxv)
     for(i=0;i<maxv+1;i++)
     {
 	// x=x^2
-	arrmap[i]=255*((i*1.0)/255)*((i*1.0)/255);
+	// arrmap[i]=255*((i*1.0)/255)*((i*1.0)/255);
+	arrmap[i]=i*i/255;
 #ifdef DEBUG
 	//printf("arrmap[%d]=%d\n",i,arrmap[i]);
 #endif
@@ -326,7 +328,8 @@ int Sqrt_MapPPM(int * arrmap,int maxv)
     for(i=0;i<maxv+1;i++)
     {
 	// x=x^(1/2)
-	arrmap[i]=255*(sqrt((i*1.0)/255));
+	// arrmap[i]=255*(sqrt((i*1.0)/255));
+	arrmap[i]=sqrt(i*1.0)*sqrt(255.0);
 #ifdef DEBUG
 	//printf("arrmap[%d]=%d\n",i,arrmap[i]);
 #endif
@@ -591,5 +594,63 @@ int CopyPPM(struct IMG * from,struct IMG * to)
 	    }
 	}
     }
+    return 0;
+}
+
+int HistEqualization(struct IMG * img,int * hist)
+{
+    int i,j,k;
+    double * pdhist;//这个分别表示归一化后的直方图,累积直方图
+    int * pihist;//映射，取整
+    printf("hhhh");
+    if(img->channel==5)
+    {
+	if(hist==NULL)
+	{
+	    hist=(int *)malloc(sizeof(int)*(img->maxv+1));
+	}
+	else
+	{
+	    for(i=0;i<img->maxv+1;i++)
+	    {
+		hist[i]=0;
+	    }
+	}
+	HistPPM(hist,img);
+	//下面是处理部分
+	pdhist=(double *)malloc(sizeof(double)*(img->maxv+1));
+	pihist=(int *)malloc(sizeof(int)*(img->maxv+1));
+	k=0;
+	for(i=0;i<img->maxv+1;i++)
+	{
+	    pdhist[i]=hist[i]*1.0/(img->sx*img->sy);//归一化直方图
+	    //printf("%d--%lf--%d\n",i,pdhist[i],hist[i]);
+	}
+	for(i=1;i<img->maxv+1;i++)
+	{
+	    pdhist[i]=pdhist[i]+pdhist[i-1];//累积直方图
+	}
+	//printf("max==%lf\n",pdhist[img->maxv]);//这个数应该是1.00
+	for(i=0;i<img->maxv+1;i++)
+	{
+	    pihist[i]=(int)pdhist[i]*(img->maxv+1)-1;//映射，取整
+	}
+	memset(hist,0,sizeof(hist));
+	//处理图片
+	for(i=0;i<img->sx;i++)
+	{
+	    for(j=0;j<img->sy;j++)
+	    {
+		img->img[(img->sx*img->maxv)+img->sy]=pihist[(img->sx*img->maxv)+img->sy];
+		hist[pihist[(img->sx*img->maxv)+img->sy]]++;
+	    }
+	}
+    }
+    else if(img->channel==6)
+    {
+	printf("color image is not support!\n");
+    }
+    free(pdhist);
+    free(pihist);
     return 0;
 }

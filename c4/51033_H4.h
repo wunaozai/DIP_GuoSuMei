@@ -105,3 +105,10 @@ int BinaryZationPPM(struct IMG * img,int val);
  * */
 int CopyPPM(struct IMG * from, struct IMG * to);
 
+/*
+ * HistEqualization : Histogram Equalization
+ * 直方图均衡化 参数1图像，参数2 hist数组
+ * 图像要有值，hist可以不用
+ * 返回值：返回处理后的图像，而hist返回处理后图像的直方图
+ * */
+int HistEqualization(struct IMG * img,int * hist);

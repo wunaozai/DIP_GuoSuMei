@@ -5,6 +5,7 @@
  * @Author: 林明晓 -- 563804489@qq.com
  * @Description: 
  *	把原来的程序分解成多个文件，便于管理
+ *	2013年10月15日 00:02:26 增加H4作业函数
  * @History: 
  ****************************************/
 
@@ -16,18 +17,44 @@ int H2();
 int H3();
 int H3_1();
 int H3_2();
+int H4();
 
 int main()
 {
     //H2();
-    H3();
+    //H3();
     //H3_1();
-    H3_2();
+    //H3_2();
     //H3_3();
+    H4();
     return 0;
 }
 
 //函数定义
+int H4()
+{
+    char fname[file_name_len];
+    struct IMG image;
+    struct IMG * pimg=&image;
+    //lena
+    strcpy(fname,"lena.ppm");
+    ReadPPM(fname,pimg);
+    int * hist;
+    hist=(int *)malloc(sizeof(int)*(pimg->maxv+1)*((pimg->channel-5)*2+1));
+    HistPPM(hist,pimg);
+    strcpy(fname,"lena_hist");
+    WriteHist(hist,fname,pimg);
+    //直方图完成
+    //均衡化处理
+    HistEqualization(pimg,hist);
+    strcpy(fname,"lena_hist_equalization.ppm");
+    WritePPM(fname,pimg);
+    strcpy(fname,"lena_hist_equalization");
+    WriteHist(hist,fname,pimg);
+
+    free(hist);
+    return 0;
+}
 
 int H3_3()
 {
@@ -200,4 +227,5 @@ int H3()
  * 1.图片的maxv是255 有些要注意+1
  * 2.位操作要加强啊，bitPlane操作起来有点力不从心啊，用了将近4个小时
  * 3.H3()和H3_1()不能同时运行，一运行H3_1()的加密信息就不准。有待时间修改
+ * 4.那个BitPlane在vc下运行有问题，而vs2005以上是没有问题
  * */

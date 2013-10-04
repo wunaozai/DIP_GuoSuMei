@@ -7,6 +7,6 @@
 clean:
 	rm 51033_H4_Main
 	rm 51033_H4.o
+	rm  *.csv
 	rm lena_*.ppm
 	rm Parrots_*.ppm
-	rm  *.csv
