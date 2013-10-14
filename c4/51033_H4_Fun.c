@@ -641,8 +641,8 @@ int HistEqualization(struct IMG * img,int * hist)
 	{
 	    for(j=0;j<img->sy;j++)
 	    {
-		img->img[(img->sx*img->maxv)+img->sy]=pihist[img->img[(img->sx*img->maxv)+img->sy]];
-		hist[pihist[img->img[(img->sx*img->maxv)+img->sy]]]++;
+		img->img[i*img->sy+j]=pihist[img->img[i*img->sy+j]];
+		hist[pihist[img->img[i*img->sy+j]]]++;
 	    }
 	}
     }
