@@ -602,7 +602,6 @@ int HistEqualization(struct IMG * img,int * hist)
     int i,j,k;
     double * pdhist;//这个分别表示归一化后的直方图,累积直方图
     int * pihist;//映射，取整
-    printf("hhhh");
     if(img->channel==5)
     {
 	if(hist==NULL)
@@ -629,20 +628,28 @@ int HistEqualization(struct IMG * img,int * hist)
 	for(i=1;i<img->maxv+1;i++)
 	{
 	    pdhist[i]=pdhist[i]+pdhist[i-1];//累积直方图
+	    //printf("%d--%lf--%d\n",i,pdhist[i],(int)(pdhist[i]*255));
 	}
 	//printf("max==%lf\n",pdhist[img->maxv]);//这个数应该是1.00
 	for(i=0;i<img->maxv+1;i++)
 	{
-	    pihist[i]=(int)pdhist[i]*(img->maxv+1)-1;//映射，取整
+	    pihist[i]=(int)(pdhist[i]*(img->maxv+1)-1);//映射，取整
+	    pihist[i]=(int)(pdhist[i]*(img->maxv));//映射，取整
+	    //printf("%d-%d\n",i,pihist[i]);
 	}
 	memset(hist,0,sizeof(hist));
 	//处理图片
+	for(i=0;i<img->maxv+1;i++)
+	{
+	    hist[i]=0;
+	}
 	for(i=0;i<img->sx;i++)
 	{
 	    for(j=0;j<img->sy;j++)
 	    {
-		img->img[(img->sx*img->maxv)+img->sy]=pihist[(img->sx*img->maxv)+img->sy];
-		hist[pihist[(img->sx*img->maxv)+img->sy]]++;
+		int t=pihist[img->img[(img->sx)*i+j]];
+		img->img[(img->sx)*i+j]=t;
+		hist[t]++;
 	    }
 	}
     }
