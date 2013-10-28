@@ -75,7 +75,7 @@ int H1()
     }
     else if(id==6)
     {
-
+	result=H1_6();//Ostu二值化
     }
     return result;
 }
@@ -155,14 +155,14 @@ int H1_3()
     int * arr=NULL;
     char ch[1024];
     char * pch=ch;
-    strcpy(fname,"lena.ppm");
+    strcpy(fname,"PepperNoise.ppm");
     ReadPPM(fname,pimg);
     arr=(int *)malloc(sizeof(int)*3*3);//申请一个3*3的模版矩阵
     //中值滤波
     FreePPM(pimg);
-    strcpy(fname,"lena.ppm");
+    strcpy(fname,"PepperNoise.ppm");
     ReadPPM(fname,pimg);
-    strcpy(ch,"Median filtering 中值滤波，平滑过度");
+    strcpy(ch,"Median filtering 中值滤波");
     arr[0]=1; arr[1]=1; arr[2]=1;
     arr[3]=1; arr[4]=1; arr[5]=1;
     arr[6]=1; arr[7]=1; arr[8]=1;
@@ -171,7 +171,7 @@ int H1_3()
     ptml->x=3;ptml->y=3;
     ptml->max=9;
     Convolution(pimg,ptml);
-    strcpy(fname,"中值滤波模糊效果lena.ppm");
+    strcpy(fname,"中值滤波模糊效果PepperNoise.ppm");
     WritePPM(fname,pimg);
     free(arr);
     return 0;
@@ -188,9 +188,9 @@ int H1_4()
     char * pch=ch;
     arr=(int *)malloc(sizeof(int)*3*3);//申请一个3*3的模版矩阵
     //模糊图像
-    strcpy(fname,"Text.ppm");
+    strcpy(fname,"ocr.ppm");
     ReadPPM(fname,pimg);
-    strcpy(ch,"Median filtering 中值滤波，平滑模糊");
+    strcpy(ch,"Average filtering 均值滤波，平滑模糊");
     arr[0]=1; arr[1]=1; arr[2]=1;
     arr[3]=1; arr[4]=1; arr[5]=1;
     arr[6]=1; arr[7]=1; arr[8]=1;
@@ -212,7 +212,6 @@ int H1_4()
     Convolution(pimg,ptml);
     
     //模糊图像
-    strcpy(fname,"Text.ppm");
     ReadPPM(fname,pimg);
     strcpy(ch,"Median filtering 中值滤波，平滑模糊");
     arr[0]=1; arr[1]=1; arr[2]=1;
@@ -234,7 +233,7 @@ int H1_4()
     ptml->y=3;
     ptml->max=1;
     Convolution(pimg,ptml);
-    strcpy(fname,"除噪后的Text.ppm");
+    strcpy(fname,"除噪后的ocr.ppm");
     WritePPM(fname,pimg);
     free(arr);
     return 0;
@@ -273,6 +272,23 @@ int H1_5()
     Convolution(pimg,ptml);
     strcpy(fname,"锐化后的lena.ppm");
     WritePPM(fname,pimg);
+    WritePPM(fname,pimg);
+    return 0;
+}
+
+int H1_6()
+{
+    char fname[file_name_len];
+    struct IMG image;
+    struct IMG * pimg=&image;
+    strcpy(fname,"lena.ppm");
+    strcpy(fname,"Text.ppm");
+    strcpy(fname,"ocr.ppm");
+    ReadPPM(fname,pimg);
+    Ostu(pimg);
+    strcpy(fname,"Ostu_lena.ppm");
+    strcpy(fname,"Ostu_Text.ppm");
+    strcpy(fname,"Ostu_ocr.ppm");
     WritePPM(fname,pimg);
     return 0;
 }

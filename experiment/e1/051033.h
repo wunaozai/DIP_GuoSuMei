@@ -144,6 +144,16 @@ int WriteHist(int * hist,char * fname,struct IMG * img);
 int Convolution(struct IMG * img,struct Template * temple);
 
 /**
+ * @ 函数名: Ostu
+ * @ 函数作用: 使用Ostu算法对图像进行二值化
+ * @ 参数: 输入一副图像
+ * @ 返回值: 0表示正常处理
+ * @ 描述: img直接修改
+ **/
+int Ostu(struct IMG * img);
+
+
+/**
  * @ 函数名: 
  * @ 函数作用: 
  * @ 参数: 

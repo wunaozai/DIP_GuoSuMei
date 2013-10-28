@@ -1,0 +1,71 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Clear	Main.c	/^void Clear()$/;"	f
+Clear	Main.c	/^void Clear();$/;"	p	file:
+Convolution	051033.h	/^int Convolution(struct IMG * img,struct Template * temple);$/;"	p	signature:(struct IMG * img,struct Template * temple)
+Convolution	FunDef.c	/^int Convolution(struct IMG * img,struct Template * ptml)$/;"	f	signature:(struct IMG * img,struct Template * ptml)
+CopyPPM	051033.h	/^int CopyPPM(struct IMG * from, struct IMG * to);$/;"	p	signature:(struct IMG * from, struct IMG * to)
+CopyPPM	FunDef.c	/^int CopyPPM(struct IMG * from,struct IMG * to)$/;"	f	signature:(struct IMG * from,struct IMG * to)
+E1	Display.c	/^void E1()$/;"	f
+E2	Display.c	/^void E2()$/;"	f
+E3	Display.c	/^void E3()$/;"	f
+E4	Display.c	/^void E4()$/;"	f
+E5	Display.c	/^void E5()$/;"	f
+ERROR	051033.h	34;"	d
+FreePPM	051033.h	/^int FreePPM(struct IMG * img);$/;"	p	signature:(struct IMG * img)
+FreePPM	FunDef.c	/^int FreePPM(struct IMG * img)$/;"	f	signature:(struct IMG * img)
+Getchoose	Main.c	/^int Getchoose()$/;"	f
+H1	Main.c	/^int H1()$/;"	f
+H1_1	Main.c	/^int H1_1()$/;"	f
+H1_2	Main.c	/^int H1_2()$/;"	f
+H1_3	Main.c	/^int H1_3()$/;"	f
+H1_4	Main.c	/^int H1_4()$/;"	f
+H1_5	Main.c	/^int H1_5()$/;"	f
+H2	Main.c	/^int H2()$/;"	f
+H3	Main.c	/^int H3()$/;"	f
+H4	Main.c	/^int H4()$/;"	f
+HistEqualization	051033.h	/^int HistEqualization(struct IMG * img,int * hist);$/;"	p	signature:(struct IMG * img,int * hist)
+HistEqualization	FunDef.c	/^int HistEqualization(struct IMG * img,int * hist)$/;"	f	signature:(struct IMG * img,int * hist)
+HistPPM	051033.h	/^int HistPPM(int * hist,struct IMG * img);$/;"	p	signature:(int * hist,struct IMG * img)
+HistPPM	FunDef.c	/^int HistPPM(int * hist,struct IMG * img)$/;"	f	signature:(int * hist,struct IMG * img)
+IMG	051033.h	/^struct IMG$/;"	s
+IMG::ch	051033.h	/^    char ch;$/;"	m	struct:IMG	access:public
+IMG::channel	051033.h	/^    int channel;$/;"	m	struct:IMG	access:public
+IMG::img	051033.h	/^    unsigned char * img;$/;"	m	struct:IMG	access:public
+IMG::maxv	051033.h	/^    int maxv;$/;"	m	struct:IMG	access:public
+IMG::sx	051033.h	/^    int sx,sy;$/;"	m	struct:IMG	access:public
+IMG::sy	051033.h	/^    int sx,sy;$/;"	m	struct:IMG	access:public
+LEN	051033.h	23;"	d
+ReadPPM	051033.h	/^int ReadPPM(char * fname,struct IMG * img);$/;"	p	signature:(char * fname,struct IMG * img)
+ReadPPM	FunDef.c	/^int ReadPPM(char * fname,struct IMG * img)$/;"	f	signature:(char * fname,struct IMG * img)
+SYSTEM	051033.h	26;"	d
+SYSTEM	051033.h	29;"	d
+Template	051033.h	/^struct Template$/;"	s
+Template::max	051033.h	/^    int max;$/;"	m	struct:Template	access:public
+Template::name	051033.h	/^    char * name;$/;"	m	struct:Template	access:public
+Template::square	051033.h	/^    int * square;$/;"	m	struct:Template	access:public
+Template::x	051033.h	/^    int x;$/;"	m	struct:Template	access:public
+Template::y	051033.h	/^    int y;$/;"	m	struct:Template	access:public
+WriteHist	051033.h	/^int WriteHist(int * hist,char * fname,struct IMG * img);$/;"	p	signature:(int * hist,char * fname,struct IMG * img)
+WriteHist	FunDef.c	/^int WriteHist(int * hist,char * fname,struct IMG * img)$/;"	f	signature:(int * hist,char * fname,struct IMG * img)
+WritePPM	051033.h	/^int WritePPM(char * fname,struct IMG * img);$/;"	p	signature:(char * fname,struct IMG * img)
+WritePPM	FunDef.c	/^int WritePPM(char * fname,struct IMG * img)$/;"	f	signature:(char * fname,struct IMG * img)
+ch	051033.h	/^    char ch;$/;"	m	struct:IMG	access:public
+channel	051033.h	/^    int channel;$/;"	m	struct:IMG	access:public
+display	Display.c	/^void display()$/;"	f
+file_name_len	051033.h	32;"	d
+img	051033.h	/^    unsigned char * img;$/;"	m	struct:IMG	access:public
+main	Main.c	/^int main()$/;"	f
+max	051033.h	/^    int max;$/;"	m	struct:Template	access:public
+maxv	051033.h	/^    int maxv;$/;"	m	struct:IMG	access:public
+name	051033.h	/^    char * name;$/;"	m	struct:Template	access:public
+square	051033.h	/^    int * square;$/;"	m	struct:Template	access:public
+str_info_len	051033.h	33;"	d
+sx	051033.h	/^    int sx,sy;$/;"	m	struct:IMG	access:public
+sy	051033.h	/^    int sx,sy;$/;"	m	struct:IMG	access:public
+x	051033.h	/^    int x;$/;"	m	struct:Template	access:public
+y	051033.h	/^    int y;$/;"	m	struct:Template	access:public

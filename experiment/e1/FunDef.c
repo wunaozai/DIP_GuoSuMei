@@ -197,11 +197,13 @@ int HistPPM(int * hist,struct IMG * img)
     int i,j,k;
     if(img->channel==5)//黑白处理
     {
-	for(i=0;i<img->sx;i++)
+	for(i=0;i<img->maxv+1;i++)
+	    hist[i]=0;
+	for(i=0;i<img->sy;i++)
 	{
-	    for(j=0;j<img->sy;j++)
+	    for(j=0;j<img->sx;j++)
 	    {
-		hist[img->img[i*img->sy+j]]++;
+		hist[img->img[i*img->sx+j]]++;
 	    }
 	}
     }
@@ -330,10 +332,11 @@ int Convolution(struct IMG * img,struct Template * ptml)
 {
     //注意该函数对偶数的模版可能有错误
     int i,j,k;
-    int x,y;
+    int x,y,tmp;
     int sum;
     int ii,jj;
     struct IMG image;
+    int * arrsort;
     CopyPPM(img,&image);
     if(strcmp(ptml->name,"")==0)
     {
@@ -343,18 +346,27 @@ int Convolution(struct IMG * img,struct Template * ptml)
     if(img->channel==5)
     {
 	printf("%s\n",ptml->name);
+	//用于中值滤波
+	arrsort=(int *)malloc(sizeof(int)*ptml->x*ptml->y)+1;
 	x=ptml->x;
 	y=ptml->y;
-	for(i=x/2;i<img->sx-(x/2);i++) //该处的x/2是图像的边界
+	for(i=x/2;i<img->sy-(x/2);i++) //该处的x/2是图像的边界
 	{
-	    for(j=y/2;j<img->sy-(y/2);j++)
+	    for(j=y/2;j<img->sx-(y/2);j++)
 	    {
 		sum=0;k=0;
 		for(ii=i-(x/2);ii<=i+(x/2);ii++)
 		{
 		    for(jj=j-(y/2);jj<=j+(x/2);jj++)
 		    {
-			sum=sum+image.img[img->sx*ii+jj]*ptml->square[k];
+			if(ptml->name[0]=='M')
+			{
+			    arrsort[k]=image.img[img->sx*ii+jj];
+			}
+			else
+			{
+			    sum=sum+image.img[img->sx*ii+jj]*ptml->square[k];
+			}
 			k++;
 		    }
 		}
@@ -376,6 +388,23 @@ int Convolution(struct IMG * img,struct Template * ptml)
 		}
 		else if(ptml->name[0]=='M')
 		{
+		    k=ptml->x*ptml->y;
+		    for(ii=0;ii<k;ii++)
+		    {
+			for(jj=k-1;jj>ii;jj--)
+			{
+			    if(arrsort[jj]<arrsort[jj-1])
+			    {
+				tmp=arrsort[jj-1];
+				arrsort[jj-1]=arrsort[jj];
+				arrsort[jj]=tmp;
+			    }
+			}
+		    }
+		    img->img[img->sx*i+j]=arrsort[k/2];
+		}
+		else if(ptml->name[0]=='A')//均值滤波
+		{
 		    img->img[img->sx*i+j]=sum/ptml->max;
 		}
 	    }
@@ -389,3 +418,72 @@ int Convolution(struct IMG * img,struct Template * ptml)
     return 0;
 }
 
+int Ostu(struct IMG * img)
+{
+    int i,j;
+    int * hist=NULL;
+    int ip1,ip2,is1,is2;//分别表示 储存前景和背景的灰度总和和像素个数
+    double w0,w1;//前景 后景像素比例
+    double mean1,mean2;//前景背景平均灰度
+    double *g,gmax;//最大类间方差
+    int th;//阀值
+    if(img->channel==5)
+    {
+	hist=(int *)malloc(sizeof(int)*img->sx*img->sy);
+	g=(double *)malloc(sizeof(double)*img->maxv+1);
+	if(hist==NULL)
+	{
+	    printf("Failed to malloc memory!\n");
+	    return ERROR;
+	}
+	HistPPM(hist,img);
+	for(i=0;i<img->maxv+1;i++)
+	{
+	    ip1=ip2=is1=is2=1;
+	    for(j=0;j<i;j++)
+	    {
+		ip1 += hist[j]*j;
+		is1 += hist[j];
+	    }
+	    mean1=ip1*1.0/is1;
+	    w0=is1*1.0/(img->sx*img->sy);
+	    //printf("mean1=%lf w0=%lf\n",mean1,w0);
+	    for(j=i;j<img->maxv+1;j++)
+	    {
+		ip2 += hist[j]*j;
+		is2 += hist[j];
+	    }
+	    mean2=ip2*1.0/is2;
+	    w1=1-w0;
+	    //printf("mean2=%lf w1=%lf\n",mean2,w1);
+	    g[i]=w0*w1*(mean1-mean2)*(mean1-mean2);
+	}
+	//find the max of g[]
+	gmax=0;
+	for(i=0;i<img->maxv+1;i++)
+	{
+	    if(g[i]>gmax)
+	    {
+		gmax=g[i];
+		th=i;
+	    }
+	}
+	for(i=0;i<img->maxv+1;i++)
+	    hist[i]=g[i];
+	WriteHist(hist,"Ostu_ocr",img);
+	printf("阀值是%d\n",th);
+	for(i=0;i<img->sx;i++)
+	{
+	    for(j=0;j<img->sy;j++)
+	    {
+		img->img[img->sx*i+j]=img->img[img->sx*i+j]>th?img->maxv:0;
+	    }
+	}
+    }
+    else if(img->channel==6)
+    {
+	printf("This color is not support.\n");
+	return -1;
+    }
+    return 0;
+}
