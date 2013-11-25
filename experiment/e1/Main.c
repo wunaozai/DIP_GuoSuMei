@@ -14,6 +14,7 @@
 void Clear();
 int main()
 {
+    freopen("in.txt","r",stdin);
     int choose=0;
     while(1)
     {
@@ -282,13 +283,13 @@ int H1_6()
     struct IMG image;
     struct IMG * pimg=&image;
     strcpy(fname,"lena.ppm");
-    strcpy(fname,"Text.ppm");
-    strcpy(fname,"ocr.ppm");
+    //strcpy(fname,"Text.ppm");
+    //strcpy(fname,"ocr.ppm");
     ReadPPM(fname,pimg);
     Ostu(pimg);
     strcpy(fname,"Ostu_lena.ppm");
-    strcpy(fname,"Ostu_Text.ppm");
-    strcpy(fname,"Ostu_ocr.ppm");
+    //strcpy(fname,"Ostu_Text.ppm");
+    //strcpy(fname,"Ostu_ocr.ppm");
     WritePPM(fname,pimg);
     return 0;
 }
@@ -298,26 +299,79 @@ int H2()
     int id;
     int result=ERROR;
     Clear();
-    E1();
+    E2();
     id=Getchoose();
     if(id==1)
     {
-	result=H2_1();//做直方图均衡化
+	result=H2_1();//以图像中心为原点旋转α+倍率β的变换
     }
     else if(id==2)
     {
-	result=H2_2();//做边缘检测
+	result=H2_2();//图像纵方向线性缩小
     }
     else if(id==3)
     {
-	result=H3_3();//中值滤波
+	result=H2_3();//图像横方向波澜平移
     }
     else if(id==4)
     {
-	result=H4_4();//模糊图像
+	result=H2_4();//几何校正
     }
     return result;
 }
+
+int H2_1()
+{
+    char fname[file_name_len];
+    struct IMG image;
+    struct IMG * pimg=&image;
+    strcpy(fname,"lena.ppm");
+    ReadPPM(fname,pimg);
+    TransformMove(pimg,50,50);
+    strcpy(fname,"平移后的lena.ppm");
+    WritePPM(fname,pimg);
+    TransformMove(pimg,-50,-50);
+    strcpy(fname,"剪切后的lena.ppm");
+    WritePPM(fname,pimg);
+    //彩色的
+    strcpy(fname,"Parrots.ppm");
+    ReadPPM(fname,pimg);
+    TransformMove(pimg,50,50);
+    strcpy(fname,"平移后的Parrots.ppm");
+    WritePPM(fname,pimg);
+    TransformMove(pimg,-50,-50);
+    strcpy(fname,"剪切后的Parrots.ppm");
+    WritePPM(fname,pimg);
+    //旋转
+    strcpy(fname,"lena.ppm");
+    ReadPPM(fname,pimg);
+    TransformCirle(pimg,30);//注意是角度
+    strcpy(fname,"旋转后的lena.ppm");
+    WritePPM(fname,pimg);
+    //彩色
+    strcpy(fname,"Parrots.ppm");
+    ReadPPM(fname,pimg);
+    TransformCirle(pimg,30);//注意是角度
+    strcpy(fname,"旋转后的Parrots.ppm");
+    WritePPM(fname,pimg);
+    return 0;
+}
+
+int H2_2()
+{
+    return 0;
+}
+
+int H2_3()
+{
+    return 0;
+}
+
+int H2_4()
+{
+    return 0;
+}
+
 
 int H3()
 {

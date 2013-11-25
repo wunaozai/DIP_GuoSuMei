@@ -152,6 +152,50 @@ int Convolution(struct IMG * img,struct Template * temple);
  **/
 int Ostu(struct IMG * img);
 
+/**
+ * @ 函数名: TransformMove 
+ * @ 函数作用: 实现图像的平移
+ * @ 参数: 原图像 向右平移right个单位 向下平移down个单位 （单位为像素）
+ * @ 返回值: 成功平移返回0 错误返回-1
+ * @ 描述: img 直接修改
+ **/
+int TransformMove(struct IMG * img, int right, int down);
+
+/**
+ * @ 函数名: TransformCirle
+ * @ 函数作用: 实现图像的旋转
+ * @ 参数: 原图像 角度（0-360度）
+ * @ 返回值: 成功平移返回0 错误返回-1
+ * @ 描述: img直接修改 
+ **/
+int TransformCirle(struct IMG * img, int angle);
+
+/**
+ * @ 函数名: ResizePPM
+ * @ 函数作用: 实现图像的放大
+ * @ 参数: 原图像 图像的最大x 图像的最大y 图像的vmax 图像（黑白或彩色）
+ * @ 返回值: 成功平移返回0 错误返回-1 
+ * @ 描述: img直接修改 
+ **/
+int ResizePPM(struct IMG * img, int sx, int sy, int vmax, int channel);
+
+/**
+ * @ 函数名: ClearPPM
+ * @ 函数作用: 实现图像的情况，其实就是把所有的图像信息都变成vmax/2（灰色）
+ * @ 参数: 原图像
+ * @ 返回值:  成功平移返回0 错误返回-1
+ * @ 描述: img直接修改 
+ **/
+int ClearPPM(struct IMG * img);
+
+/**
+ * @ 函数名: CreatePPM
+ * @ 函数作用: 实现图像画布的创建 画布的颜色为灰色
+ * @ 参数: 原图像 sx sy vmax channel
+ * @ 返回值: 成功创建返回0 错误返回-1
+ * @ 描述: img直接修改
+ **/
+int CreatePPM(struct IMG *img, int sx, int sy, int vmax, int channel);
 
 /**
  * @ 函数名: 
@@ -160,4 +204,3 @@ int Ostu(struct IMG * img);
  * @ 返回值: 
  * @ 描述: 
  **/
-

@@ -7,6 +7,7 @@
  * @GitHub: https://github.com/wunaozai/DIP_GuoSuMei
  *
  * @History: 2013年10月18日 14:32:40
+ *	    2013年11月25日 23:27:18 增加实验三中的函数
  ****************************************/
 
 #include "051033.h"
@@ -99,6 +100,7 @@ int CopyPPM(struct IMG * from,struct IMG * to)
     to->maxv=from->maxv;
     to->sx=from->sx;
     to->sy=from->sy;
+    to->img=NULL;
     if(from->channel==5)
     {
 	to->img=(unsigned char *)malloc(to->sx*to->sy);
@@ -484,6 +486,311 @@ int Ostu(struct IMG * img)
     {
 	printf("This color is not support.\n");
 	return -1;
+    }
+    return 0;
+}
+
+int TransformMove(struct IMG * img, int right, int down)
+{
+    int i,j,k;
+    struct IMG image;
+    if(img->channel==5)
+    {
+	CopyPPM(img,&image);
+	ClearPPM(img);
+	for(i=0;i<image.sy;i++)
+	{
+	    for(j=0;j<image.sx;j++)
+	    {
+		//处理边界（可能因为平移后会出界）
+		if(j+right<0)
+		    continue;
+		if(j+right>=img->sx)
+		    continue;
+		if(i+down<0)
+		    continue;
+		if(i+down>=img->sy)
+		    continue;
+		img->img[(i+down)*img->sx+(j+right)]=image.img[i*image.sx+j];
+	    }
+	}
+    }
+    else if(img->channel==6)
+    {
+	CopyPPM(img,&image);
+	ClearPPM(img);
+	for(i=0;i<image.sy;i++)
+	{
+	    for(j=0;j<image.sx;j++)
+	    {
+		//处理边界（可能因为平移后会出界）
+		if(j+right<0)
+		    continue;
+		if(j+right>=img->sx)
+		    continue;
+		if(i+down<0)
+		    continue;
+		if(i+down>=img->sy)
+		    continue;
+		for(k=0;k<3;k++)
+		{
+		    img->img[((i+down)*img->sx+(j+right))*3+k]=image.img[(i*image.sx+j)*3+k];
+		}
+	    }
+	}
+    }
+    return 0;
+}
+int TransformCirle(struct IMG * img, int angle)
+{
+    int i,j,k;
+    struct IMG image;
+    // C 语言中的sin cos 库函数是使用弧度的所以要转换
+    double ang=angle*1.0*3.1415/180;
+    if(img->channel==5)
+    {
+	CopyPPM(img,&image);
+	ResizePPM(img,img->sx*3,img->sy*3,img->maxv,img->channel);
+	ClearPPM(img);
+	for(i=0;i<image.sy;i++)
+	{
+	    for(j=0;j<image.sx;j++)
+	    {
+		//img->img[(i+down)*img->sx+(j+right)]=image.img[i*img->sx+j];
+		//Xnew = Xold*cos(a) - Yold*sin(a)
+		//Ynew = Xold*sin(a) + Yold*cos(a)
+		int jj=j*cos(ang)-i*sin(ang); //这个是x坐标
+		int ii=j*sin(ang)+i*cos(ang); //这个是y坐标
+		//处理边界（可能因为平移后会出界）
+		jj=jj+img->sx/2;
+		ii=ii+img->sy/2;
+		img->img[ii*img->sx+jj]=image.img[i*image.sx+j];
+	    }
+	}
+	//到这里其实就完成了旋转，但是由于画布一开始定义太多，所以有很多的冗余信息
+	//下面就是去掉这些冗余信息
+	int x1,x2,y1,y2;//画布中有效信息的四条线
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		if(img->img[i*img->sx+j]!=img->maxv/2)
+		    goto aa;
+	    }
+	}
+aa:
+	y1=i;
+	for(i=img->sy-1;i>=0;i--)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		if(img->img[i*img->sx+j]!=img->maxv/2)
+		    goto bb;
+	    }
+	}
+bb:
+	y2=i;
+	for(i=0;i<img->sx;i++)
+	{
+	    for(j=0;j<img->sy;j++)
+	    {
+		if(img->img[j*img->sx+i]!=img->maxv/2)
+		    goto cc;
+	    }
+	}
+cc:
+	x1=i;
+	for(i=img->sx-1;i>=0;i--)
+	{
+	    for(j=0;j<img->sy;j++)
+	    {
+		if(img->img[j*img->sx+i]!=img->maxv/2)
+		    goto dd;
+	    }
+	}
+dd:
+	x2=i;
+	//平移
+	TransformMove(img,-x1,-y1);
+	int y=y2-y1;
+	int x=x2-x1;
+	struct IMG image2;
+	image2.ch='P';
+	image2.channel=5;
+	image2.maxv=img->maxv;
+	image2.sx=x;
+	image2.sy=y;
+	image2.img=(unsigned char *) malloc (x*y);
+	for(i=0;i<y;i++)
+	{
+	    for(j=0;j<x;j++)
+	    {
+		image2.img[i*x+j]=img->img[i*img->sx+j];
+	    }
+	}
+	CopyPPM(&image2,img);
+    }
+    else if(img->channel==6)
+    {
+	CopyPPM(img,&image);
+	ResizePPM(img,img->sx*3,img->sy*3,img->maxv,img->channel);
+	ClearPPM(img);
+	for(i=0;i<image.sy;i++)
+	{
+	    for(j=0;j<image.sx;j++)
+	    {
+		int jj=j*cos(ang)-i*sin(ang); //这个是x坐标
+		int ii=j*sin(ang)+i*cos(ang); //这个是y坐标
+		//处理边界（可能因为平移后会出界）
+		jj=jj+img->sx/2;
+		ii=ii+img->sy/2;
+		for(k=0;k<3;k++)
+		{
+		    img->img[(ii*img->sx+jj)*3+k]=image.img[(i*image.sx+j)*3+k];
+		}
+	    }
+	}
+	//到这里其实就完成了旋转，但是由于画布一开始定义太多，所以有很多的冗余信息
+	//下面就是去掉这些冗余信息
+	int x1,x2,y1,y2;//画布中有效信息的四条线
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		if(img->img[(i*img->sx+j)*3]!=img->maxv/2)
+		    goto ee;
+	    }
+	}
+ee:
+	y1=i;
+	for(i=img->sy-1;i>=0;i--)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		if(img->img[(i*img->sx+j)*3]!=img->maxv/2)
+		    goto ff;
+	    }
+	}
+ff:
+	y2=i;
+	for(i=0;i<img->sx;i++)
+	{
+	    for(j=0;j<img->sy;j++)
+	    {
+		if(img->img[(j*img->sx+i)*3]!=img->maxv/2)
+		    goto gg;
+	    }
+	}
+gg:
+	x1=i;
+	for(i=img->sx-1;i>=0;i--)
+	{
+	    for(j=0;j<img->sy;j++)
+	    {
+		if(img->img[(j*img->sx+i)*3]!=img->maxv/2)
+		    goto hh;
+	    }
+	}
+hh:
+	x2=i;
+	//平移
+	TransformMove(img,-x1,-y1);
+	int y=y2-y1;
+	int x=x2-x1;
+	struct IMG image2;
+	image2.ch='P';
+	image2.channel=6;
+	image2.maxv=img->maxv;
+	image2.sx=x;
+	image2.sy=y;
+	image2.img=(unsigned char *) malloc (x*y*3);
+	for(i=0;i<y;i++)
+	{
+	    for(j=0;j<x;j++)
+	    {
+		for(k=0;k<3;k++)
+		{
+		    image2.img[(i*x+j)*3+k]=img->img[(i*img->sx+j)*3+k];
+		}
+	    }
+	}
+	CopyPPM(&image2,img);
+    }
+    return 0;
+}
+int ResizePPM(struct IMG * img, int sx, int sy, int vmax, int channel)
+{
+    int i,j,k;
+    FreePPM(img);
+    img->ch='P';img->sx=sx;img->sy=sy;img->maxv=vmax;img->channel=channel;
+    if(img->channel==5)
+    {
+	img->img=(unsigned char *)malloc(img->sx*img->sy);
+	if(img->img==NULL)
+	{
+	    printf("Failed to malloc memory!\n");
+	    return ERROR;
+	}
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		img->img[i*img->sx+j]=img->maxv/2;
+	    }
+	}
+    }
+    else if(img->channel==6)
+    {
+	img->img=(unsigned char *)malloc(img->sx*img->sy*3);
+	if(img->img==NULL)
+	{
+	    printf("Failed to malloc memory!\n");
+	    return ERROR;
+	}
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		for(k=0;k<3;k++)
+		{
+		    img->img[(i*img->sx+j)*3+k]=img->maxv/2;
+		}
+	    }
+	}
+    }
+    return 0;
+}
+
+int CreatePPM(struct IMG *img, int sx, int sy, int vmax, int channel)
+{
+    return 0;
+}
+
+int ClearPPM(struct IMG * img)
+{
+    int i,j,k;
+    if(img->channel==5)
+    {
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		img->img[i*img->sx+j]=img->maxv/2;
+	    }
+	}
+    }
+    else if(img->channel==6)
+    {
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		for(k=0;k<3;k++)
+		{
+		    img->img[(i*img->sx+j)*3+k]=img->maxv/2;
+		}
+	    }
+	}
     }
     return 0;
 }
