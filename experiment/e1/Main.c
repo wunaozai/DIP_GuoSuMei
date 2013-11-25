@@ -296,10 +296,27 @@ int H1_6()
 int H2()
 {
     int id;
+    int result=ERROR;
     Clear();
-    E2();
+    E1();
     id=Getchoose();
-    return 0;
+    if(id==1)
+    {
+	result=H2_1();//做直方图均衡化
+    }
+    else if(id==2)
+    {
+	result=H2_2();//做边缘检测
+    }
+    else if(id==3)
+    {
+	result=H3_3();//中值滤波
+    }
+    else if(id==4)
+    {
+	result=H4_4();//模糊图像
+    }
+    return result;
 }
 
 int H3()
