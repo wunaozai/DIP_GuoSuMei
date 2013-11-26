@@ -206,6 +206,24 @@ int CreatePPM(struct IMG *img, int sx, int sy, int vmax, int channel);
  **/
 int MultiplePPM(struct IMG * img, double powerx, double powery);
 
+/**
+ * @ 函数名: LinearShrink
+ * @ 函数作用: 对图像进行方向线性缩小
+ * @ 参数: 原图像 flag方式
+ * @ 返回值: 返回0表示正常处理 其他的返回表示出错
+ * @ 描述: img直接修改
+ **/
+int LinearShrink (struct IMG * img, int flag);
+
+/**
+ * @ 函数名: TransformWave
+ * @ 函数作用: 横方向波澜平移
+ * @ 参数: 原图像 周期 幅度
+ * @ 返回值: 成功平移返回0 错误返回-1
+ * @ 描述: img直接修改 
+ **/
+int TransformWave(struct IMG * img, int T, int A);
+
 
 /**
  * @ 函数名: 

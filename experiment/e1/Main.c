@@ -372,12 +372,33 @@ int H2_1()
 int H2_2()
 {
     /*图像纵方向线性缩小*/
-
+    char fname[file_name_len];
+    struct IMG image;
+    struct IMG * pimg=&image;
+    strcpy(fname,"lena.ppm");
+    ReadPPM(fname,pimg);
+    LinearShrink(pimg,1);
+    strcpy(fname,"纵方向线性缩小后的lena.ppm");
+    WritePPM(fname,pimg);
+    //彩色
+    strcpy(fname,"Parrots.ppm");
+    ReadPPM(fname,pimg);
+    LinearShrink(pimg,1);
+    strcpy(fname,"纵方向线性缩小后的Parrots.ppm");
+    WritePPM(fname,pimg);
     return 0;
 }
 
 int H2_3()
 {
+    char fname[file_name_len];
+    struct IMG image;
+    struct IMG * pimg=&image;
+    strcpy(fname,"lena.ppm");
+    ReadPPM(fname,pimg);
+    TransformWave(pimg,1,5);
+    strcpy(fname,"横方向波澜平移lena.ppm");
+    WritePPM(fname,pimg);
     return 0;
 }
 

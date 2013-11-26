@@ -877,3 +877,46 @@ int MultiplePPM(struct IMG * img, double powerx, double powery)
     }
     return 0;
 }
+
+int LinearShrink (struct IMG * img, int flag)
+{
+    int i,j,k;
+    struct IMG image;
+    if(img->channel==5)
+    {
+	CopyPPM(img,&image);
+	ClearPPM(img);
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=i/2;j<img->sx-i/2;j++)
+	    {
+		k=(j-i/2)*(img->sx*1.0/(img->sx-i+1));
+		//k=0;
+		img->img[i*img->sx+j]=image.img[i*img->sx+k];
+	    }
+	}
+    }
+    else if(img->channel==6)
+    {
+	CopyPPM(img,&image);
+	ClearPPM(img);
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=i/2;j<img->sx-i/2;j++)
+	    {
+		k=(j-i/2)*(img->sx*1.0/(img->sx-i+1));
+		int l;
+		for(l=0;l<3;l++)
+		{
+		    img->img[(i*img->sx+j)*3 + l]=image.img[(i*img->sx+k)*3 + l];
+		}
+	    }
+	}
+    }
+    return 0;
+}
+
+int TransformWave(struct IMG * img, int T, int A)
+{
+    return 0;
+}
