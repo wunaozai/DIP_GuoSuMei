@@ -172,7 +172,7 @@ int TransformCirle(struct IMG * img, int angle);
 
 /**
  * @ 函数名: ResizePPM
- * @ 函数作用: 实现图像的放大
+ * @ 函数作用: 实现图像画布的放大，缩小
  * @ 参数: 原图像 图像的最大x 图像的最大y 图像的vmax 图像（黑白或彩色）
  * @ 返回值: 成功平移返回0 错误返回-1 
  * @ 描述: img直接修改 
@@ -196,6 +196,16 @@ int ClearPPM(struct IMG * img);
  * @ 描述: img直接修改
  **/
 int CreatePPM(struct IMG *img, int sx, int sy, int vmax, int channel);
+
+/**
+ * @ 函数名: MultiplePPM
+ * @ 函数作用: 实现图像的放大，缩小
+ * @ 参数: 原图像 水平方向powerx倍 垂直方向powery倍
+ * @ 返回值: 成功平移返回0 错误返回-1 
+ * @ 描述: img直接修改 
+ **/
+int MultiplePPM(struct IMG * img, double powerx, double powery);
+
 
 /**
  * @ 函数名: 

@@ -354,11 +354,25 @@ int H2_1()
     TransformCirle(pimg,30);//注意是角度
     strcpy(fname,"旋转后的Parrots.ppm");
     WritePPM(fname,pimg);
+    //缩放倍数
+    strcpy(fname,"lena.ppm");
+    ReadPPM(fname,pimg);
+    MultiplePPM(pimg,2,1);
+    strcpy(fname,"缩放后的lena.ppm");
+    WritePPM(fname,pimg);
+    //彩色
+    strcpy(fname,"Parrots.ppm");
+    ReadPPM(fname,pimg);
+    MultiplePPM(pimg,2,1);
+    strcpy(fname,"缩放后的Parrots.ppm");
+    WritePPM(fname,pimg);
     return 0;
 }
 
 int H2_2()
 {
+    /*图像纵方向线性缩小*/
+
     return 0;
 }
 

@@ -629,6 +629,19 @@ dd:
 	    }
 	}
 	CopyPPM(&image2,img);
+	//下面将处理空穴问题
+	for(i=1;i<img->sy-1;i++)
+	{
+	    for(j=1;j<img->sx-1;j++)
+	    {
+		if(img->img[i*img->sx+j]==img->maxv/2/*是空穴的地方*/)
+		{
+		    img->img[i*img->sx+j]=(image2.img[(i-1)*image2.sx+j]+image2.img[(i+1)*image2.sx+j]+image2.img[i*image2.sx+(j-1)]+image2.img[i*image2.sx+(j+1)])/4;
+		    //img->img[i*img->sx+j]=255;
+		}
+	    }
+	}
+	//CopyPPM(&image2,img);
     }
     else if(img->channel==6)
     {
@@ -715,6 +728,22 @@ hh:
 	    }
 	}
 	CopyPPM(&image2,img);
+	//下面将处理空穴问题
+	for(i=1;i<img->sy-1;i++)
+	{
+	    for(j=1;j<img->sx-1;j++)
+	    {
+		if(img->img[(i*img->sx+j)*3]==img->maxv/2/*是空穴的地方*/)
+		{
+		    for(k=0;k<3;k++)
+		    {
+			//if(img->img[(i*img->sx+j)*3 + k]==img->maxv/2/*是空穴的地方*/)
+			img->img[(i*img->sx+j)*3+k]=(image2.img[((i-1)*image2.sx+j)*3 + k]+image2.img[((i+1)*image2.sx+j)*3 + k]+image2.img[(i*image2.sx+(j-1))*3 + k]+image2.img[(i*image2.sx+(j+1))*3 + k])/4;
+			//img->img[(i*img->sx+j)*3+k]=255;
+		    }
+		}
+	    }
+	}
     }
     return 0;
 }
@@ -788,6 +817,60 @@ int ClearPPM(struct IMG * img)
 		for(k=0;k<3;k++)
 		{
 		    img->img[(i*img->sx+j)*3+k]=img->maxv/2;
+		}
+	    }
+	}
+    }
+    return 0;
+}
+
+int MultiplePPM(struct IMG * img, double powerx, double powery)
+{
+    int i,j,k;
+    struct IMG image;
+    if(img->channel==5)
+    {
+	CopyPPM(img,&image);
+	ResizePPM(img,(img->sx*powerx),(img->sy*powery),img->maxv,img->channel);
+	ClearPPM(img);
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		//该方法是直接取整
+		img->img[i*img->sx+j]=image.img[ (int)(i/powery)*image.sx + (int)(j/powerx)];
+
+		//下面的方法是使用双线性插值 (有BUG)
+		/*
+		double ans=0;
+		double x2,y2;//用于记录小数部分
+		int x1,y1;//用于记录整数部分
+		x1=j/powerx;
+		y1=i/powery;
+		x2=(j*1.0/powerx)-x1;
+		y2=(i*1.0/powery)-y1;
+		ans+=image.img[(y1*image.sx) + (x1)]*(x2*y2);
+		ans+=image.img[(y1*image.sx) + (x1+1)]*((1-x2)*y2);
+		ans+=image.img[((y1+1)*image.sx) + (x1)]*(x2*(1-y2));
+		ans+=image.img[((y1+1)*image.sx) + (x1+1)]*((1-x2)*(1-y2));
+		img->img[i*img->sx+j]=(int)ans;
+		*/
+	    }
+	}
+    }
+    else if(img->channel==6)
+    {
+	CopyPPM(img,&image);
+	ResizePPM(img,(img->sx*powerx),(img->sy*powery),img->maxv,img->channel);
+	ClearPPM(img);
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		//该方法是直接取整
+		for(k=0;k<3;k++)
+		{
+		    img->img[(i*img->sx+j)*3+k]=image.img[ ((int)(i/powery)*image.sx + (int)(j/powerx))*3 + k];
 		}
 	    }
 	}
