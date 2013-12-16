@@ -389,15 +389,21 @@ int H2_2()
     return 0;
 }
 
-int H2_3()
+int H2_3()//图像横方向波澜平移
 {
     char fname[file_name_len];
     struct IMG image;
     struct IMG * pimg=&image;
     strcpy(fname,"lena.ppm");
     ReadPPM(fname,pimg);
-    TransformWave(pimg,1,5);
+    TransformWave(pimg,5,15);
     strcpy(fname,"横方向波澜平移lena.ppm");
+    WritePPM(fname,pimg);
+    //彩色
+    strcpy(fname,"Parrots.ppm");
+    ReadPPM(fname,pimg);
+    TransformWave(pimg,10,5);
+    strcpy(fname,"横方向波澜平移Parrots.ppm");
     WritePPM(fname,pimg);
     return 0;
 }
@@ -411,9 +417,62 @@ int H2_4()
 int H3()
 {
     int id;
+    int result;
     Clear();
     E3();
     id=Getchoose();
+    if(id==1)
+    {
+	result=H3_1();//给定ChromeKey，进行图像合成
+    }
+    else if(id==2)
+    {
+	result=H3_2();//ChromeKey 自动确定，再进行图像合成
+    }
+    else if(id==3)
+    {
+	result=H3_3();//空域LSB 内嵌入水印
+    }
+    else if(id=4)
+    {
+	result=H3_4();//利用位图的复杂度嵌入数字水印
+    }
+    return result;
+}
+
+int H3_1()//ChromeKey自动确定，进行图像合成
+{
+    char fname[file_name_len];
+    struct IMG fimage,bimage,srcimage;
+    struct IMG * fimg=&fimage;
+    struct IMG * bimg=&bimage;
+    struct IMG * srcimg=&srcimage;
+    strcpy(fname,"bing_03.ppm");
+    ReadPPM(fname,fimg);
+    strcpy(fname,"bing_04.ppm");
+    ReadPPM(fname,bimg);
+    struct ChromeKey key;
+    key.R=key.G=key.B=-1;
+    key.flag=6;//表示彩色
+    key.D=5;
+    CompositePPM(srcimg,fimg,bimg,&key);
+    strcpy(fname,"合成后的bing.ppm");
+    WritePPM(fname,srcimg);
+    return 0;
+}
+
+int H3_4()//ChromeKey 自动确定，再进行图像合成
+{
+    return 0;
+}
+
+int H3_2()//空域LSB 内嵌入水印
+{
+    return 0;
+}
+
+int H3_3()//利用位图的复杂度嵌入数字水印
+{
     return 0;
 }
 

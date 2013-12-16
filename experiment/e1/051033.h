@@ -68,7 +68,21 @@ struct Template
     char * name;
     int max;
 };
-
+/*
+ * flag 是表示该ChromeKey是彩色还是黑白图像
+ * 如果是黑白图像则阈值是W
+ * 如果是彩色图像则阀值是R G B
+ * D是阀值的误差范围
+ * */
+struct ChromeKey
+{
+    int R;
+    int G;
+    int B;
+    int W;
+    int D;
+    int flag;
+};
 
 /**
  * @ 函数名: ReadPPM
@@ -218,12 +232,20 @@ int LinearShrink (struct IMG * img, int flag);
 /**
  * @ 函数名: TransformWave
  * @ 函数作用: 横方向波澜平移
- * @ 参数: 原图像 周期 幅度
+ * @ 参数: 原图像 周期(周期为0-360) 幅度(上下平移以像素为单位)
  * @ 返回值: 成功平移返回0 错误返回-1
  * @ 描述: img直接修改 
  **/
 int TransformWave(struct IMG * img, int T, int A);
 
+/**
+ * @ 函数名: CompositePPM
+ * @ 函数作用: 对两幅图像进行合成
+ * @ 参数: srcimg输出图像,fimg前景图像,bimg背景图像,ChromeKey背景阈值
+ * @ 返回值: 0表示成功 -1表示错误 -2表示前景图像大于背景图像
+ * @ 描述: ChromeKey中如果RGBW是-1则表示要自动确定阈值。否则为给定阈值。自动确定阈值的最后会修改ChromeKey
+ **/
+int CompositePPM(struct IMG * src, struct IMG * fimg, struct IMG * bimg, struct ChromeKey * key);
 
 /**
  * @ 函数名: 

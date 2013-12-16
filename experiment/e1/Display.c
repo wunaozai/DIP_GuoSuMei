@@ -39,26 +39,23 @@ void E2()
     printf("实验三  图像空间坐标变换\n");
     printf("1.以图像中心为原点旋转α+倍率β的变换\n");
     printf("2.图像纵方向线性缩小\n");
-    printf("*3.图像横方向波澜平移\n");
+    printf("3.图像横方向波澜平移\n");
     printf("*4.几何校正\n");
     printf("\n");
 }
 
 void E3()
 {
-    printf("实验四  彩色图像处理\n");
+    printf("实验四  图像处理应用\n");
     printf("1.给定ChromeKey，进行图像合成\n");
-    printf("2.YUV中UV压缩\n");
-    printf("3.YUV中Y增强\n");
-    printf("4.ChromeKey 自动确定，再进行图像合成\n");
+    printf("2.ChromeKey 自动确定，再进行图像合成\n");
+    printf("3.空域LSB 内嵌入水印\n");
+    printf("4.利用位图的复杂度嵌入数字水印\n");
     printf("\n");
 }
 
 void E4()
 {
-    printf("选作实验  图像数字水印\n");
-    printf("1.空域LSB 内嵌入水印\n");
-    printf("2.利用位图的复杂度嵌入数字水印\n");
     printf("\n");
 }
 

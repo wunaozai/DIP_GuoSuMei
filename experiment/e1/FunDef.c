@@ -7,7 +7,8 @@
  * @GitHub: https://github.com/wunaozai/DIP_GuoSuMei
  *
  * @History: 2013年10月18日 14:32:40
- *	    2013年11月25日 23:27:18 增加实验三中的函数
+ *	     2013年11月25日 23:27:18 增加实验三中的函数
+ *	     2013年12月17日 02:02:05 增加波澜效果和图像的合成
  ****************************************/
 
 #include "051033.h"
@@ -918,5 +919,56 @@ int LinearShrink (struct IMG * img, int flag)
 
 int TransformWave(struct IMG * img, int T, int A)
 {
+    int i,j,k;
+    struct IMG image;
+    //double angle=T*1.0*3.1415/180;
+    double angle=0;
+    int newy=0;
+    if(img->channel==5)
+    {
+	CopyPPM(img,&image);
+	ResizePPM(img,img->sx*1,img->sy*2,img->maxv,img->channel);
+	ClearPPM(img);
+	for(i=0;i<image.sx;i++)
+	{
+	    angle=T*i*1.0*3.1415/180;
+	    //printf("-->%lf\n",sin(angle));
+	    newy=(int)A*sin(angle);
+	    newy=newy+A;
+	    for(j=0;j<image.sy;j++)
+	    {
+		//if(newy<=0||newy>=img->sx)
+		//    continue;
+		img->img[(newy+j)*img->sx+i]=image.img[j*image.sx+i];
+	    }
+	}
+    }
+    else if(img->channel==6)
+    {
+	CopyPPM(img,&image);
+	ResizePPM(img,img->sx*1,img->sy*2,img->maxv,img->channel);
+	ClearPPM(img);
+	for(i=0;i<image.sx;i++)
+	{
+	    angle=T*i*1.0*3.1415/180;
+	    newy=(int)A*sin(angle);
+	    newy=newy+A;
+	    for(j=0;j<image.sy;j++)
+	    {
+		//if(newy<=0||newy>=img->sx)
+		//    continue;
+		for(k=0;k<3;k++)
+		{
+		    img->img[((newy+j)*img->sx+i)*3+k]=image.img[(j*image.sx+i)*3+k];
+		}
+	    }
+	}
+    }
+    return 0;
+}
+
+int CompositePPM(struct IMG * src, struct IMG * fimg, struct IMG * bimg, struct ChromeKey * key)
+{
+    int i;
     return 0;
 }
