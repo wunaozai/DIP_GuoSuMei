@@ -967,8 +967,114 @@ int TransformWave(struct IMG * img, int T, int A)
     return 0;
 }
 
-int CompositePPM(struct IMG * src, struct IMG * fimg, struct IMG * bimg, struct ChromeKey * key)
+int CompositePPM(struct IMG * src, struct IMG * fimg, struct IMG * bimg, struct ChromeKey * key, int x, int y)
 {
-    int i;
+    int i,j,k;
+    /*
+    if(fimg->sx>bimg->sx || fimg->sy>bimg->sy)
+    {
+	printf("The foreground pic.sx or pic.sy is not large than background pic.sx or pic.sy.\n");
+	return -2;
+    }
+    */
+    if(key->flag==5)
+    {
+	printf("This flag=5 is no support.\n");
+	return ERROR;
+    }
+    else if(key->flag==6)
+    {
+	int red,greed,blue;
+	int count;
+	int size=3;//指定所要去的像素宽度
+	if(key->R==-1&&key->G==-1&&key->B==-1)//没有提供阈值
+	{
+	    //一般的透明色都是在四周边缘处，所以只要判断四周的颜色最多的那个就是所取的阈值
+	    red=greed=blue=0;
+	    count=0;
+	    //遍历四周
+	    for(i=1;i<=size;i++)//注意图像是懂从0开始的
+	    {
+		for(j=0;j<fimg->sx;j++)
+		{
+		    //上边
+		    red   = red  +fimg->img[(i*fimg->sx+j)*3+0];
+		    greed = greed+fimg->img[(i*fimg->sx+j)*3+1];
+		    blue  = blue +fimg->img[(i*fimg->sx+j)*3+2];
+		    count++;
+		    //下边
+		    red   = red  +fimg->img[((fimg->sy-i)*fimg->sx+j)*3+0];
+		    greed = greed+fimg->img[((fimg->sy-i)*fimg->sx+j)*3+1];
+		    blue  = blue +fimg->img[((fimg->sy-i)*fimg->sx+j)*3+2];
+		    count++;
+		}
+		for(j=0;j<fimg->sy;j++)
+		{
+		    //左边
+		    red   =red  +fimg->img[(j*fimg->sx+i)*3+0];
+		    greed =greed+fimg->img[(j*fimg->sx+i)*3+1];
+		    blue  =blue +fimg->img[(j*fimg->sx+i)*3+2];
+		    count++;
+		    //右边
+		    red   =red  +fimg->img[((fimg->sy-j)*fimg->sx+i)*3+0];
+		    greed =greed+fimg->img[((fimg->sy-j)*fimg->sx+i)*3+1];
+		    blue  =blue +fimg->img[((fimg->sy-j)*fimg->sx+i)*3+2];
+		    count++;
+		}
+	    }
+	    key->R=red/count;
+	    key->G=greed/count;
+	    key->B=blue/count;
+	}
+	//printf("R=%d,G=%d,B=%d\n",fimg->img[0],fimg->img[1],fimg->img[2]);
+	//printf("R=%d,G=%d,B=%d\n",red,greed,blue);
+	//printf("R=%d,G=%d,B=%d\n",key->R,key->G,key->B);
+	//合成
+	ResizePPM(src,bimg->sx,bimg->sy,bimg->maxv,bimg->channel);
+	//方法:对前景图像的每一个像素，计算其与ChromeKey的距离
+	for(i=0;i<src->sy;i++)
+	{
+	    for(j=0;j<src->sx;j++)
+	    {
+		/*
+		src->img[(i*src->sx+j)*3+0]=key->R;
+		src->img[(i*src->sx+j)*3+1]=key->G;
+		src->img[(i*src->sx+j)*3+2]=key->B;
+		*/
+		int d=0;
+		
+		if(i>y&&(i<fimg->sy+y) && j>x&&j<(fimg->sx+x))
+		{
+		    //在这个区域表示要进行处理的
+		    d+=pow(abs(fimg->img[((i-y)*fimg->sx+(j-x))*3+0] - key->R) ,2);
+		    d+=pow(abs(fimg->img[((i-y)*fimg->sx+(j-x))*3+1] - key->G) ,2);
+		    d+=pow(abs(fimg->img[((i-y)*fimg->sx+(j-x))*3+2] - key->B) ,2);
+		    d=(int)sqrt(d*1.0);
+		    if(d<=key->D)//小于阈值的误差，选择背景
+		    {
+			for(k=0;k<3;k++)
+			{
+			    src->img[(i*src->sx+j)*3+k]=bimg->img[(i*bimg->sx+j)*3+k];
+			}
+		    }
+		    else//选择前景图像
+		    {
+			for(k=0;k<3;k++)
+			{
+			    src->img[(i*src->sx+j)*3+k]=fimg->img[((i-y)*fimg->sx+(j-x))*3+k];
+			}
+		    }
+		}
+		else 
+		{
+		    //直接取背景色
+		    for(k=0;k<3;k++)
+		    {
+			src->img[(i*src->sx+j)*3+k]=bimg->img[(i*bimg->sx+j)*3+k];
+		    }
+		}
+	    }
+	}
+    }
     return 0;
 }

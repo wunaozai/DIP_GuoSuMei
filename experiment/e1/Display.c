@@ -47,10 +47,9 @@ void E2()
 void E3()
 {
     printf("实验四  图像处理应用\n");
-    printf("1.给定ChromeKey，进行图像合成\n");
-    printf("2.ChromeKey 自动确定，再进行图像合成\n");
-    printf("3.空域LSB 内嵌入水印\n");
-    printf("4.利用位图的复杂度嵌入数字水印\n");
+    printf("1.ChromeKey自动确定，进行图像合成\n");
+    printf("2.空域LSB 内嵌入水印\n");
+    printf("3.利用位图的复杂度嵌入数字水印\n");
     printf("\n");
 }
 

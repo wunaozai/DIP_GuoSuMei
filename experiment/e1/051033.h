@@ -241,11 +241,11 @@ int TransformWave(struct IMG * img, int T, int A);
 /**
  * @ 函数名: CompositePPM
  * @ 函数作用: 对两幅图像进行合成
- * @ 参数: srcimg输出图像,fimg前景图像,bimg背景图像,ChromeKey背景阈值
+ * @ 参数: srcimg输出图像,fimg前景图像,bimg背景图像,ChromeKey背景阈值 x,y是前景图像的偏移坐标
  * @ 返回值: 0表示成功 -1表示错误 -2表示前景图像大于背景图像
  * @ 描述: ChromeKey中如果RGBW是-1则表示要自动确定阈值。否则为给定阈值。自动确定阈值的最后会修改ChromeKey
  **/
-int CompositePPM(struct IMG * src, struct IMG * fimg, struct IMG * bimg, struct ChromeKey * key);
+int CompositePPM(struct IMG * src, struct IMG * fimg, struct IMG * bimg, struct ChromeKey * key, int x, int y);
 
 /**
  * @ 函数名: 

@@ -423,19 +423,15 @@ int H3()
     id=Getchoose();
     if(id==1)
     {
-	result=H3_1();//给定ChromeKey，进行图像合成
+	result=H3_1();//ChromeKey自动确定，进行图像合成
     }
     else if(id==2)
     {
-	result=H3_2();//ChromeKey 自动确定，再进行图像合成
+	result=H3_2();//空域LSB 内嵌入水印
     }
     else if(id==3)
     {
-	result=H3_3();//空域LSB 内嵌入水印
-    }
-    else if(id=4)
-    {
-	result=H3_4();//利用位图的复杂度嵌入数字水印
+	result=H3_3();//利用位图的复杂度嵌入数字水印
     }
     return result;
 }
@@ -447,22 +443,34 @@ int H3_1()//ChromeKey自动确定，进行图像合成
     struct IMG * fimg=&fimage;
     struct IMG * bimg=&bimage;
     struct IMG * srcimg=&srcimage;
+    struct ChromeKey key;
     strcpy(fname,"bing_03.ppm");
     ReadPPM(fname,fimg);
+    ReadPPM(fname,srcimg);
     strcpy(fname,"bing_04.ppm");
     ReadPPM(fname,bimg);
-    struct ChromeKey key;
     key.R=key.G=key.B=-1;
     key.flag=6;//表示彩色
-    key.D=5;
-    CompositePPM(srcimg,fimg,bimg,&key);
+    key.D=150;//如果前景图像的背景透明色不纯时，可以适当的提高该数值
+    CompositePPM(srcimg,fimg,bimg,&key,0,0);
     strcpy(fname,"合成后的bing.ppm");
     WritePPM(fname,srcimg);
-    return 0;
-}
-
-int H3_4()//ChromeKey 自动确定，再进行图像合成
-{
+    //不同大小的图像
+    strcpy(fname,"linux.ppm");
+    ReadPPM(fname,fimg);
+    strcpy(fname,"zhbit.ppm");
+    ReadPPM(fname,bimg);
+    key.R=key.G=key.B=-1;
+    key.flag=6;//表示彩色
+    key.D=150;//如果前景图像的背景透明色不纯时，可以适当的提高该数值
+    CompositePPM(srcimg,fimg,bimg,&key,100,100);
+    CompositePPM(bimg,fimg,srcimg,&key,200,200);
+    strcpy(fname,"girl_f.ppm");
+    ReadPPM(fname,fimg);
+    key.R=key.G=key.B=-1;
+    CompositePPM(srcimg,fimg,bimg,&key,0,200);
+    strcpy(fname,"合成后的zhbit.ppm");
+    WritePPM(fname,srcimg);
     return 0;
 }
 
