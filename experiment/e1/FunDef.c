@@ -279,7 +279,7 @@ int WriteHist(int * hist,char * fname,struct IMG * img)
 	    fprintf(fp,"%d,%d\n",i,hist[i]);
 	}
 	fclose(fp);
-	
+
 	strcpy(pname,fname);
 	strcat(pname,"_green.csv");
 	printf("Write to %s\n",pname);
@@ -325,7 +325,7 @@ int WriteHist(int * hist,char * fname,struct IMG * img)
 	    fprintf(fp,"%d,%d,%d,%d\n",i,hist[i],hist[(img->maxv+1)+i],hist[(img->maxv+1)*2+i]);
 	}
 	fclose(fp);
-	
+
 	printf("Write complete!\n");
     }
     return 0;
@@ -843,19 +843,19 @@ int MultiplePPM(struct IMG * img, double powerx, double powery)
 
 		//下面的方法是使用双线性插值 (有BUG)
 		/*
-		double ans=0;
-		double x2,y2;//用于记录小数部分
-		int x1,y1;//用于记录整数部分
-		x1=j/powerx;
-		y1=i/powery;
-		x2=(j*1.0/powerx)-x1;
-		y2=(i*1.0/powery)-y1;
-		ans+=image.img[(y1*image.sx) + (x1)]*(x2*y2);
-		ans+=image.img[(y1*image.sx) + (x1+1)]*((1-x2)*y2);
-		ans+=image.img[((y1+1)*image.sx) + (x1)]*(x2*(1-y2));
-		ans+=image.img[((y1+1)*image.sx) + (x1+1)]*((1-x2)*(1-y2));
-		img->img[i*img->sx+j]=(int)ans;
-		*/
+		   double ans=0;
+		   double x2,y2;//用于记录小数部分
+		   int x1,y1;//用于记录整数部分
+		   x1=j/powerx;
+		   y1=i/powery;
+		   x2=(j*1.0/powerx)-x1;
+		   y2=(i*1.0/powery)-y1;
+		   ans+=image.img[(y1*image.sx) + (x1)]*(x2*y2);
+		   ans+=image.img[(y1*image.sx) + (x1+1)]*((1-x2)*y2);
+		   ans+=image.img[((y1+1)*image.sx) + (x1)]*(x2*(1-y2));
+		   ans+=image.img[((y1+1)*image.sx) + (x1+1)]*((1-x2)*(1-y2));
+		   img->img[i*img->sx+j]=(int)ans;
+		   */
 	    }
 	}
     }
@@ -971,12 +971,12 @@ int CompositePPM(struct IMG * src, struct IMG * fimg, struct IMG * bimg, struct 
 {
     int i,j,k;
     /*
-    if(fimg->sx>bimg->sx || fimg->sy>bimg->sy)
-    {
-	printf("The foreground pic.sx or pic.sy is not large than background pic.sx or pic.sy.\n");
-	return -2;
-    }
-    */
+       if(fimg->sx>bimg->sx || fimg->sy>bimg->sy)
+       {
+       printf("The foreground pic.sx or pic.sy is not large than background pic.sx or pic.sy.\n");
+       return -2;
+       }
+       */
     if(key->flag==5)
     {
 	printf("This flag=5 is no support.\n");
@@ -1037,12 +1037,12 @@ int CompositePPM(struct IMG * src, struct IMG * fimg, struct IMG * bimg, struct 
 	    for(j=0;j<src->sx;j++)
 	    {
 		/*
-		src->img[(i*src->sx+j)*3+0]=key->R;
-		src->img[(i*src->sx+j)*3+1]=key->G;
-		src->img[(i*src->sx+j)*3+2]=key->B;
-		*/
+		   src->img[(i*src->sx+j)*3+0]=key->R;
+		   src->img[(i*src->sx+j)*3+1]=key->G;
+		   src->img[(i*src->sx+j)*3+2]=key->B;
+		   */
 		int d=0;
-		
+
 		if(i>y&&(i<fimg->sy+y) && j>x&&j<(fimg->sx+x))
 		{
 		    //在这个区域表示要进行处理的
@@ -1077,4 +1077,166 @@ int CompositePPM(struct IMG * src, struct IMG * fimg, struct IMG * bimg, struct 
 	}
     }
     return 0;
+}
+
+int BitPlane(struct IMG * img,char * str,int bit)
+{
+    int i,j,k,m;
+    char temp=0;
+    int cnt=0;
+    printf("准备加密的信息:%s\n",str);
+    if(img->channel==5)
+    {
+	cnt=0;
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		int a=cnt/8;
+		int b=cnt%8;
+		temp=str[a];
+		if(temp==0)
+		{
+		    for(k=0;k<8;k++)
+		    {
+			RemoveBitValue(&(img->img[i*img->sx+j+k]),bit);
+		    }
+		    return 0;
+		}
+		temp=GetBitValue(temp,b);
+		RemoveBitValue(&(img->img[i*img->sx+j]),bit);
+		if(temp==1)
+		    SetBitValue(&(img->img[i*img->sx+j]),bit);
+		cnt++;
+	    }
+	}
+    }
+    else if(img->channel==6)
+    {
+	cnt=0;
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		for(k=0;k<3;k++)
+		{
+		    int a=cnt/8;
+		    int b=cnt%8;
+		    temp=str[a];
+		    if(temp==0)
+		    {
+			for(m=0;m<8;m++)
+			{
+			    RemoveBitValue(&(img->img[(i*img->sx+j)*3+k+m]),bit);
+			}
+			return 0;
+		    }
+		    temp=GetBitValue(temp,b);
+		    RemoveBitValue(&(img->img[(i*img->sx+j)*3+k]),bit);
+		    if(temp==1)
+			SetBitValue(&(img->img[(i*img->sx+j)*3+k]),bit);
+		    cnt++;
+		}
+	    }
+	}
+    }
+    return 0;
+}
+
+
+int unBitPlane(struct IMG * img,char * str,int bit)
+{
+    int i,j,k;
+    char temp;
+    int cnt=1;
+    memset(str,0,sizeof(str_info_len));//注意要初始化
+    if(img->channel==5)
+    {
+	temp=0;cnt=1;
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		int a=cnt/8;
+		int b=((cnt-1)%8);
+		if(GetBitValue((img->img[i*img->sx+j]),bit)==1)
+		{
+		    SetBitValue(&temp,b);
+		}
+		else
+		{
+		    RemoveBitValue(&temp,b);
+		}
+		if(cnt%8==0)
+		{
+		    if(temp==0)
+		    {
+			str[a-1]=0;
+			return 0;
+		    }
+		    str[a-1]=temp;
+		}
+		cnt++;
+	    }
+	}
+    }
+    else if(img->channel==6)
+    {
+	temp=0;cnt=1;
+	for(i=0;i<img->sy;i++)
+	{
+	    for(j=0;j<img->sx;j++)
+	    {
+		for(k=0;k<3;k++)
+		{
+		    int a=cnt/8;
+		    int b=((cnt-1)%8);
+		    if(GetBitValue((img->img[(i*img->sx+j)*3+k]),bit)==1)
+		    {
+			SetBitValue(&temp,b);
+		    }
+		    else
+		    {
+			RemoveBitValue(&temp,b);
+		    }
+		    if(cnt%8==0)
+		    {
+			if(temp==0)
+			{
+			    str[a-1]=0;
+			    return 0;
+			}
+			str[a-1]=temp;
+		    }
+		    cnt++;
+		}
+	    }
+	}
+    }
+    return 0;
+}
+
+void RemoveBitValue(char * value,int index)
+{
+    int val=*value;
+    int bit=1<<index;
+    int nmark=0;
+    nmark=(~nmark)^bit;
+    val &= nmark;
+    *value=val;
+}
+
+void SetBitValue(char * value,int index)
+{
+    int val=*value;
+    int pos=1<<index;
+    val |= pos;
+    *value=val;
+}
+
+int GetBitValue(char value,int index)
+{
+    int val=value;
+    val=val>>index;
+    return val&1;
 }

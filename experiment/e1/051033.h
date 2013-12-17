@@ -248,6 +248,51 @@ int TransformWave(struct IMG * img, int T, int A);
 int CompositePPM(struct IMG * src, struct IMG * fimg, struct IMG * bimg, struct ChromeKey * key, int x, int y);
 
 /**
+ * @ 函数名: BitPlane
+ * @ 函数作用: 对图片进行水印隐藏
+ * @ 参数: 原图像 要加密的文字 隐藏在图像中的bit位
+ * @ 返回值: 成功返回0
+ * @ 描述: 直接操作原图像
+ **/
+int BitPlane(struct IMG * img, char * str, int bit);
+
+/**
+ * @ 函数名: unBitPlane
+ * @ 函数作用: 对已经加入水印的图片进行解密
+ * @ 参数: 原图像 读取的信息 读取第bit位的加密信息
+ * @ 返回值: 成功返回0 读取的信息保存在str中 
+ * @ 描述: 
+ **/
+int unBitPlane(struct IMG * img, char * str, int bit);
+
+/**
+ * @ 函数名: RemoveBitValue
+ * @ 函数作用: 把value数值的第index位变为0
+ * @ 参数: 
+ * @ 返回值: 
+ * @ 描述: 
+ **/
+void RemoveBitValue(char * value,int index);
+
+/**
+ * @ 函数名: SetBitValue
+ * @ 函数作用: 把value数值的第index位变为1
+ * @ 参数: 
+ * @ 返回值: 
+ * @ 描述: 
+ **/
+void SetBitValue(char  * value,int index);
+
+/**
+ * @ 函数名: GetBitValue
+ * @ 函数作用: 获得value数值的第index位
+ * @ 参数: 
+ * @ 返回值: 如果第index位是0就返回0，是1就返回1
+ * @ 描述: 
+ **/
+int GetBitValue(char value,int index);
+
+/**
  * @ 函数名: 
  * @ 函数作用: 
  * @ 参数: 

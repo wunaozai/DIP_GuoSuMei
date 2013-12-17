@@ -14,7 +14,7 @@
 void Clear();
 int main()
 {
-    freopen("in.txt","r",stdin);
+    //freopen("in.txt","r",stdin);
     int choose=0;
     while(1)
     {
@@ -476,6 +476,34 @@ int H3_1()//ChromeKey自动确定，进行图像合成
 
 int H3_2()//空域LSB 内嵌入水印
 {
+    char fname[file_name_len];
+    struct IMG image;
+    struct IMG * pimg=&image;
+    char ch[str_info_len];
+    char * str;
+    int bit=7;	//第0比特用来当作水印信息,因为低频率人眼不敏感
+		//使用bit=7时，打开图片可以看到图片最上面的图片颜色信息有明显的痕迹
+    //lena
+    str=ch;
+    strcpy(str,"Lena!This is the DIP course.");
+    strcpy(fname,"lena.ppm");
+    ReadPPM(fname,pimg);
+    BitPlane(pimg,str,bit);
+    WritePPM("lena_bitplane.ppm",pimg);
+    str[0]=0;//清空
+    unBitPlane(pimg,str,bit);
+    printf("加密信息是: %s \n",str);
+
+    //Parrots
+    strcpy(str,"Parrots!This is the DIP course.");
+    strcpy(fname,"Parrots.ppm");
+    ReadPPM(fname,pimg);
+    BitPlane(pimg,str,bit);
+    WritePPM("Parrots_bitplane.ppm",pimg);
+    str[0]=0;//清空
+    unBitPlane(pimg,str,bit);
+    printf("加密信息是: %s \n",str);
+
     return 0;
 }
 
